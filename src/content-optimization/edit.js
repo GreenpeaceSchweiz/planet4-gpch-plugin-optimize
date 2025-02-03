@@ -11,7 +11,7 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { useBlockProps } from '@wordpress/block-editor';
+import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -20,6 +20,11 @@ import { useBlockProps } from '@wordpress/block-editor';
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import './editor.scss';
+
+const INNER_BLOCK_TEMPLATE = [
+	[ 'planet4-gpch-ab-testing/variant', { name: 'Variant A' } ],
+	[ 'planet4-gpch-ab-testing/variant', { name: 'Variant B' } ],
+];
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -31,11 +36,8 @@ import './editor.scss';
  */
 export default function Edit() {
 	return (
-		<p { ...useBlockProps() }>
-			{ __(
-				'Planet4 Gpch Ab Testing – hello from the editor!',
-				'planet4-gpch-ab-testing'
-			) }
-		</p>
+		<div { ...useBlockProps() }>
+			<InnerBlocks template={ INNER_BLOCK_TEMPLATE } />
+		</div>
 	);
 }
