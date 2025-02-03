@@ -25,6 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
  */
 function create_block_planet4_gpch_ab_testing_block_init() {
-	register_block_type( __DIR__ . '/build/planet4-gpch-ab-testing' );
+	register_block_type( __DIR__ . '/build/content-optimization' );
+	register_block_type( __DIR__ . '/build/variant' );
 }
 add_action( 'init', 'create_block_planet4_gpch_ab_testing_block_init' );
