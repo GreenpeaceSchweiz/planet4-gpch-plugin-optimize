@@ -11,7 +11,7 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
+import { InnerBlocks, InspectorControls, useBlockProps } from '@wordpress/block-editor';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -21,6 +21,8 @@ import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
  */
 import './editor.scss';
 
+import { PanelBody, TextControl, ToggleControl } from '@wordpress/components';
+
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -29,10 +31,32 @@ import './editor.scss';
  *
  * @return {Element} Element to render.
  */
-export default function Edit() {
+export default function Edit( { attributes, setAttributes } ) {
+	const { variantName, percentage } = attributes;
 	return (
-		<p { ...useBlockProps() }>
-			<InnerBlocks />
-		</p>
+        <>
+			<InspectorControls>
+				<PanelBody title={__('Variant Settings', 'planet4-gpch-ab-testing')} >
+					<TextControl
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+						label={ __(
+							'Variant Name',
+							'planet4-gpch-ab-testing',
+						) }
+						value={ variantName || '' }
+						onChange={ ( value ) =>
+							setAttributes( { variantName: value } )
+						}
+					/>
+				</PanelBody>
+				<PanelBody title={__('Targeting', 'planet4-gpch-ab-testing')} >
+					Testing
+				</PanelBody>
+			</InspectorControls>
+    		<div {...useBlockProps()}>
+        		<InnerBlocks/>
+            </div>
+		</>
 	);
 }
