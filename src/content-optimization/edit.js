@@ -11,7 +11,11 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { InnerBlocks, InspectorControls, useBlockProps } from '@wordpress/block-editor';
+import {
+	InnerBlocks,
+	InspectorControls,
+	useBlockProps,
+} from '@wordpress/block-editor';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -21,8 +25,7 @@ import { InnerBlocks, InspectorControls, useBlockProps } from '@wordpress/block-
  */
 import './editor.scss';
 
-import { PanelBody, TextControl, ToggleControl } from '@wordpress/components';
-
+import { PanelBody, ToggleControl } from '@wordpress/components';
 
 const INNER_BLOCK_TEMPLATE = [
 	[ 'planet4-gpch-ab-testing/variant', { name: 'Variant A' } ],
@@ -42,12 +45,14 @@ export default function Edit( { attributes, setAttributes } ) {
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title={ __( 'Settings', 'planet4-gpch-ab-testing' ) }>
+				<PanelBody
+					title={ __( 'Settings', 'planet4-gpch-ab-testing' ) }
+				>
 					<ToggleControl
 						checked={ !! status }
 						label={ __(
 							'Test is running',
-							'planet4-gpch-ab-testing',
+							'planet4-gpch-ab-testing'
 						) }
 						onChange={ () =>
 							setAttributes( {

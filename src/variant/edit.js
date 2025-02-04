@@ -11,7 +11,11 @@ import { __ } from '@wordpress/i18n';
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { InnerBlocks, InspectorControls, useBlockProps } from '@wordpress/block-editor';
+import {
+	InnerBlocks,
+	InspectorControls,
+	useBlockProps,
+} from '@wordpress/block-editor';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -21,7 +25,7 @@ import { InnerBlocks, InspectorControls, useBlockProps } from '@wordpress/block-
  */
 import './editor.scss';
 
-import { PanelBody, TextControl, ToggleControl } from '@wordpress/components';
+import { PanelBody, TextControl } from '@wordpress/components';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -34,15 +38,20 @@ import { PanelBody, TextControl, ToggleControl } from '@wordpress/components';
 export default function Edit( { attributes, setAttributes } ) {
 	const { variantName, percentage } = attributes;
 	return (
-        <>
+		<>
 			<InspectorControls>
-				<PanelBody title={__('Variant Settings', 'planet4-gpch-ab-testing')} >
+				<PanelBody
+					title={ __(
+						'Variant Settings',
+						'planet4-gpch-ab-testing'
+					) }
+				>
 					<TextControl
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 						label={ __(
 							'Variant Name',
-							'planet4-gpch-ab-testing',
+							'planet4-gpch-ab-testing'
 						) }
 						value={ variantName || '' }
 						onChange={ ( value ) =>
@@ -50,13 +59,15 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 					/>
 				</PanelBody>
-				<PanelBody title={__('Targeting', 'planet4-gpch-ab-testing')} >
+				<PanelBody
+					title={ __( 'Targeting', 'planet4-gpch-ab-testing' ) }
+				>
 					Testing
 				</PanelBody>
 			</InspectorControls>
-    		<div {...useBlockProps()}>
-        		<InnerBlocks/>
-            </div>
+			<div { ...useBlockProps() }>
+				<InnerBlocks />
+			</div>
 		</>
 	);
 }
