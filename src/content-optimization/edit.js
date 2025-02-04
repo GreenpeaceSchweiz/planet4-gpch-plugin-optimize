@@ -25,7 +25,7 @@ import {
  */
 import './editor.scss';
 
-import { PanelBody, ToggleControl } from '@wordpress/components';
+import { PanelBody, TextControl, ToggleControl } from '@wordpress/components';
 
 const INNER_BLOCK_TEMPLATE = [
 	[ 'planet4-gpch-ab-testing/variant', { name: 'Variant A' } ],
@@ -41,7 +41,22 @@ const INNER_BLOCK_TEMPLATE = [
  * @return {Element} Element to render.
  */
 export default function Edit( { attributes, setAttributes } ) {
-	const { status } = attributes;
+	const { status,  } = attributes;
+	let { optimizationId } = attributes;
+
+	if (optimizationId === undefined) {
+		// Generate a random optimizationId
+		const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		const length = 16;
+		optimizationId = "";
+
+		for (let i = 0; i < length; i++) {
+			optimizationId += chars.charAt(Math.floor(Math.random() * chars.length));
+		}
+
+		setAttributes( { optimizationId: optimizationId } )
+	}
+
 	return (
 		<>
 			<InspectorControls>
@@ -51,7 +66,7 @@ export default function Edit( { attributes, setAttributes } ) {
 					<ToggleControl
 						checked={ !! status }
 						label={ __(
-							'Test is running',
+							'Enable/Disable the Optimization',
 							'planet4-gpch-ab-testing'
 						) }
 						onChange={ () =>
@@ -59,6 +74,26 @@ export default function Edit( { attributes, setAttributes } ) {
 								status: ! status,
 							} )
 						}
+						help={ __(
+							'Disabling the Optimization will show the first variant to everyone.',
+							'planet4-gpch-ab-testing'
+						) }
+					/>
+					<TextControl
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+						label={ __(
+							'Experiment ID',
+							'planet4-gpch-ab-testing'
+						) }
+						value={ optimizationId || '' }
+						onChange={ ( value ) =>
+							setAttributes( { optimizationId: value } )
+						}
+						help={ __(
+							"Used to identify the Optimization. You can enter your own string (letters and numbers only, no spaces). Don't change once the experiment has started.",
+							'planet4-gpch-ab-testing'
+						) }
 					/>
 				</PanelBody>
 			</InspectorControls>

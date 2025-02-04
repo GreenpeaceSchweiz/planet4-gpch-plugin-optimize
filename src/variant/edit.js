@@ -25,7 +25,8 @@ import {
  */
 import './editor.scss';
 
-import { PanelBody, TextControl } from '@wordpress/components';
+import { PanelBody, RangeControl, TextControl } from '@wordpress/components';
+import { percent } from '@wordpress/icons';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -36,7 +37,7 @@ import { PanelBody, TextControl } from '@wordpress/components';
  * @return {Element} Element to render.
  */
 export default function Edit( { attributes, setAttributes } ) {
-	const { variantName, percentage } = attributes;
+	const { variantName, targetPercentage } = attributes;
 	return (
 		<>
 			<InspectorControls>
@@ -62,7 +63,39 @@ export default function Edit( { attributes, setAttributes } ) {
 				<PanelBody
 					title={ __( 'Targeting', 'planet4-gpch-ab-testing' ) }
 				>
-					Testing
+					<RangeControl
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+						label="Target group percentage"
+						afterIcon={ percent }
+						value={ targetPercentage }
+						onChange={ ( value ) =>
+							setAttributes( { targetPercentage: value } )
+						}
+						min={ 0 }
+						max={ 100 }
+						step={ 1 }
+						marks={ [
+							{
+								value: 25,
+								label: '25%',
+							},
+							{
+								value: 50,
+								label: '50%',
+							},
+							{
+								value: 75,
+								label: '75%',
+							},
+							{
+								value: 100,
+								label: '100%',
+							},
+						] }
+						railColor="red"
+						trackColor="green"
+					/>
 				</PanelBody>
 			</InspectorControls>
 			<div { ...useBlockProps() }>

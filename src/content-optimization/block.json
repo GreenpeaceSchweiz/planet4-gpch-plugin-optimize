@@ -12,6 +12,9 @@
 	"attributes": {
 		"status": {
 			"type": "boolean"
+		},
+		"optimizationId": {
+			"type": "string"
 		}
 	},
 	"supports": {

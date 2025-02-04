@@ -15,9 +15,12 @@ import { InnerBlocks, useBlockProps } from '@wordpress/block-editor';
  *
  * @return {Element} Element to render.
  */
-export default function save() {
+export default function save( { attributes } ) {
 	return (
-		<div { ...useBlockProps.save() }>
+		<div
+			{ ...useBlockProps.save( { className: 'gp-optimize-container' } ) }
+			data-status={ attributes.status }
+		>
 			<InnerBlocks.Content />
 		</div>
 	);
