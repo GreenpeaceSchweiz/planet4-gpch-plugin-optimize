@@ -12,6 +12,9 @@
 		"variantName": {
 			"type": "string"
 		},
+		"variantId": {
+			"type": "string"
+		},
 		"targetPercentage": {
 			"type": "number"
 		}

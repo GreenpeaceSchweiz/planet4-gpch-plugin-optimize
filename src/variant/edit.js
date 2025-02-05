@@ -32,12 +32,33 @@ import { percent } from '@wordpress/icons';
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
  *
+ * @param {Object}   root0
+ * @param {Object}   root0.attributes
+ * @param {Function} root0.setAttributes
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  *
  * @return {Element} Element to render.
  */
 export default function Edit( { attributes, setAttributes } ) {
 	const { variantName, targetPercentage } = attributes;
+	let { variantId } = attributes;
+
+	if ( variantId === undefined ) {
+		// Generate a random optimizationId
+		const chars =
+			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		const length = 8;
+		variantId = '';
+
+		for ( let i = 0; i < length; i++ ) {
+			variantId += chars.charAt(
+				Math.floor( Math.random() * chars.length )
+			);
+		}
+
+		setAttributes( { variantId } );
+	}
+
 	return (
 		<>
 			<InspectorControls>
@@ -47,6 +68,10 @@ export default function Edit( { attributes, setAttributes } ) {
 						'planet4-gpch-ab-testing'
 					) }
 				>
+					<p>
+						<b>Variant ID: </b>
+						{ variantId || '' }
+					</p>
 					<TextControl
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize

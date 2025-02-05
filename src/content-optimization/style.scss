@@ -6,12 +6,9 @@
  */
 
 .gp-optimize-container {
-	background-color: #21759b;
-	color: #fff;
-	padding: 2px;
 
 	/* Hide all but the first variant */
 	.gp-optimize-variant:not(:first-child) {
-		display: none
+		display: none;
 	}
 }

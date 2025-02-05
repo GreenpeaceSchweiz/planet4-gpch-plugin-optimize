@@ -38,23 +38,34 @@ const INNER_BLOCK_TEMPLATE = [
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  *
- * @return {Element} Element to render.
+ * @param {Object}   root0
+ * @param {Object}   root0.attributes
+ * @param {Function} root0.setAttributes
+ *
+ * @return {JSX.Element} Element to render.
  */
 export default function Edit( { attributes, setAttributes } ) {
-	const { status,  } = attributes;
-	let { optimizationId } = attributes;
+	const { status } = attributes;
+	let { optimizationId, optimizationName } = attributes;
 
-	if (optimizationId === undefined) {
+	if ( optimizationId === undefined ) {
 		// Generate a random optimizationId
-		const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		const chars =
+			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 		const length = 16;
-		optimizationId = "";
+		optimizationId = '';
 
-		for (let i = 0; i < length; i++) {
-			optimizationId += chars.charAt(Math.floor(Math.random() * chars.length));
+		for ( let i = 0; i < length; i++ ) {
+			optimizationId += chars.charAt(
+				Math.floor( Math.random() * chars.length )
+			);
 		}
 
-		setAttributes( { optimizationId: optimizationId } )
+		setAttributes( { optimizationId } );
+	}
+
+	if ( optimizationName === undefined ) {
+		optimizationName = optimizationId;
 	}
 
 	return (
@@ -79,19 +90,32 @@ export default function Edit( { attributes, setAttributes } ) {
 							'planet4-gpch-ab-testing'
 						) }
 					/>
+					<p>
+						<b>Optimization ID: </b>
+						{ optimizationId || '' }
+					</p>
 					<TextControl
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 						label={ __(
-							'Experiment ID',
+							'Experiment Name',
 							'planet4-gpch-ab-testing'
 						) }
-						value={ optimizationId || '' }
-						onChange={ ( value ) =>
-							setAttributes( { optimizationId: value } )
-						}
+						value={ optimizationName || '' }
+						onChange={ ( value ) => {
+							if ( /^[A-Za-z0-9 -]*$/.test( value ) ) {
+								setAttributes( { optimizationName: value } );
+							} else {
+								alert(
+									__(
+										'Please use only letters, numbers, spaces and dashes.',
+										'planet4-gpch-ab-testing'
+									)
+								);
+							}
+						} }
 						help={ __(
-							"Used to identify the Optimization. You can enter your own string (letters and numbers only, no spaces). Don't change once the experiment has started.",
+							"Used to identify the Optimization. Don't change once the experiment has started!",
 							'planet4-gpch-ab-testing'
 						) }
 					/>

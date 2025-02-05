@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "planet4-gpch-ab-testing/content-optimization",
+  "allowedBlocks": [
+    "planet4-gpch-ab-testing/variant"
+  ],
+  "version": "0.1.0",
+  "title": "Content Optimization",
+  "category": "widgets",
+  "icon": "smiley",
+  "description": "Example block scaffolded with Create Block tool.",
+  "example": {},
+  "attributes": {
+    "status": {
+      "type": "boolean"
+    },
+    "optimizationId": {
+      "type": "string"
+    },
+    "optimizationName": {
+      "type": "string"
+    }
+  },
+  "supports": {
+    "html": false
+  },
+  "textdomain": "planet4-gpch-ab-testing",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js"
+}

@@ -15,6 +15,9 @@
 		},
 		"optimizationId": {
 			"type": "string"
+		},
+		"optimizationName": {
+			"type": "string"
 		}
 	},
 	"supports": {
