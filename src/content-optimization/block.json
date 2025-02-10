@@ -6,9 +6,8 @@
 	"version": "0.1.0",
 	"title": "Content Optimization",
 	"category": "widgets",
-	"icon": "smiley",
 	"description": "Container block for optimization variants.",
-	"keywords": ["a/b", "ab", "test", "experiment", "personalization"],
+	"keywords": [ "a/b", "ab", "test", "experiment", "personalization" ],
 	"example": {},
 	"attributes": {
 		"status": {

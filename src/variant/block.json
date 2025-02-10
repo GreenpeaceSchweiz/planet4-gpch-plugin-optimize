@@ -5,7 +5,6 @@
 	"version": "0.1.0",
 	"title": "Optimization variant",
 	"category": "widgets",
-	"icon": "smiley",
 	"description": "Variant of an Optimization",
 	"keywords": ["a/b", "ab", "test", "experiment", "personalization", "variant", "version"],
 	"parent": [ "planet4-gpch-plugin-optimize/content-optimization" ],
