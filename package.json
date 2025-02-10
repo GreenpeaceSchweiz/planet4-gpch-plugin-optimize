@@ -8,8 +8,10 @@
 	"scripts": {
 		"build": "wp-scripts build",
 		"format": "wp-scripts format",
+		"format:php": "vendor/bin/phpcbf --standard=WordPress --extensions=php ./classes/ planet4-gpch-plugin-optimize.php",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
+		"lint:php": "vendor/bin/phpcs -ps --standard=WordPress --extensions=php ./classes/ planet4-gpch-plugin-optimize.php",
 		"fix:js": "wp-scripts lint-js --fix",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
