@@ -36,7 +36,7 @@ const OptimizeFrontend = () => {
 			// Return the stored variant only if it still exists
 			for ( const variant of variants ) {
 				if ( variant.dataset.variantId === storedVariant ) {
-					console.log("Found stored variant ID: ", storedVariant);
+					console.log( 'Found stored variant ID: ', storedVariant );
 					return storedVariant;
 				}
 			}
@@ -45,17 +45,17 @@ const OptimizeFrontend = () => {
 		// Choose by weighted random
 		const weightedRandomData = [];
 		for ( const variant of variants ) {
-			let weight = parseInt( variant.dataset.targetPercentage )
-			if (isNaN(weight) ){
+			let weight = parseInt( variant.dataset.targetPercentage );
+			if ( isNaN( weight ) ) {
 				weight = 50;
 			}
 
 			weightedRandomData.push( {
 				variantId: variant.dataset.variantId,
-				weight: weight,
+				weight,
 			} );
 		}
-		console.log("Weighted random data: ", weightedRandomData);
+		console.log( 'Weighted random data: ', weightedRandomData );
 
 		const winningVariant = selectWeightedRandomItem( weightedRandomData );
 
@@ -65,12 +65,12 @@ const OptimizeFrontend = () => {
 			winningVariant.variantId
 		);
 
-		console.log("Selected winning variant: ", winningVariant.variantId);
+		console.log( 'Selected winning variant: ', winningVariant.variantId );
 
 		return winningVariant.variantId;
 	};
 
-	console.log("Starting Optimize");
+	console.log( 'Starting Optimize' );
 	optimizeBlocks.forEach( ( optimizeBlock ) => {
 		// Only continue if the experiment is enabled
 		if (
@@ -88,7 +88,12 @@ const OptimizeFrontend = () => {
 
 			let winnerVariant;
 
-			console.log("Winning variant for Optimization " + optimizeBlock.dataset.optimizationId + " is " + winnerVariantId);
+			console.log(
+				'Winning variant for Optimization ' +
+					optimizeBlock.dataset.optimizationId +
+					' is ' +
+					winnerVariantId
+			);
 
 			// Show the winning variant, hide the rest
 			for ( const variant of variants ) {
@@ -101,10 +106,9 @@ const OptimizeFrontend = () => {
 			}
 
 			// Send an event to Mixpanel
-			if ( typeof mixpanel !== "undefined" ) {
+			if ( typeof mixpanel !== 'undefined' ) {
 				mixpanel.track( '$experiment_started', {
-					'Experiment name':
-						optimizeBlock.dataset.optimizationName,
+					'Experiment name': optimizeBlock.dataset.optimizationName,
 					'Variant name': winnerVariant.dataset.variantName,
 				} );
 			}
