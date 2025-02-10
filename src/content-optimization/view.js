@@ -101,7 +101,7 @@ const OptimizeFrontend = () => {
 			}
 
 			// Send an event to Mixpanel
-			if ( mixpanel !== undefined ) {
+			if ( typeof mixpanel !== "undefined" ) {
 				mixpanel.track( '$experiment_started', {
 					'Experiment name':
 						optimizeBlock.dataset.optimizationName,
