@@ -28,8 +28,8 @@ import './editor.scss';
 import { PanelBody, TextControl, ToggleControl } from '@wordpress/components';
 
 const INNER_BLOCK_TEMPLATE = [
-	[ 'planet4-gpch-plugin-optimize/variant', { name: 'Variant A' } ],
-	[ 'planet4-gpch-plugin-optimize/variant', { name: 'Variant B' } ],
+	[ 'planet4-gpch-plugin-optimize/variant', { variantName: 'Variant A' } ],
+	[ 'planet4-gpch-plugin-optimize/variant', { variantName: 'Variant B' } ],
 ];
 
 /**

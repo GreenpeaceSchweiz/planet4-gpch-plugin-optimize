@@ -6,7 +6,9 @@
 	"title": "Optimization variant",
 	"category": "widgets",
 	"icon": "smiley",
-	"description": "Example block scaffolded with Create Block tool.",
+	"description": "Variant of an Optimization",
+	"keywords": ["a/b", "ab", "test", "experiment", "personalization", "variant", "version"],
+	"parent": [ "planet4-gpch-plugin-optimize/content-optimization" ],
 	"example": {},
 	"attributes": {
 		"variantName": {

@@ -7,7 +7,8 @@
 	"title": "Content Optimization",
 	"category": "widgets",
 	"icon": "smiley",
-	"description": "Example block scaffolded with Create Block tool.",
+	"description": "Container block for optimization variants.",
+	"keywords": ["a/b", "ab", "test", "experiment", "personalization"],
 	"example": {},
 	"attributes": {
 		"status": {
