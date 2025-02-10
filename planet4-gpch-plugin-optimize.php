@@ -1,16 +1,16 @@
 <?php
 /**
- * Plugin Name:       Planet4 Gpch Ab Testing
- * Description:       Example block scaffolded with Create Block tool.
+ * Plugin Name:       Planet4 GPCH Optimize
+ * Description:       A/B Testing and Personalization for Planet4 and Mixpanel
  * Version:           0.1.0
  * Requires at least: 6.7
  * Requires PHP:      7.4
- * Author:            The WordPress Contributors
+ * Author:            Stefan Dürrenberger/Greenpeace Switzerland
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       planet4-gpch-ab-testing
+ * Text Domain:       planet4-gpch-plugin-optimize
  *
- * @package CreateBlock
+ * @package GpchOptimize
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,8 +24,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
  */
-function create_block_planet4_gpch_ab_testing_block_init() {
+function planet4_gpch_plugin_optimize_init () {
 	register_block_type( __DIR__ . '/build/content-optimization' );
 	register_block_type( __DIR__ . '/build/variant' );
 }
-add_action( 'init', 'create_block_planet4_gpch_ab_testing_block_init' );
+add_action( 'init', 'planet4_gpch_plugin_optimize_init' );

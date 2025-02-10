@@ -1,8 +1,8 @@
 {
-	"name": "planet4-gpch-ab-testing",
+	"name": "planet4-gpch-pluigin-optimize",
 	"version": "0.1.0",
-	"description": "Example block scaffolded with Create Block tool.",
-	"author": "The WordPress Contributors",
+	"description": "A/B Testing and Personalization for Planet4 and Mixpanel",
+	"author": "Stefan Dürrenberger/Greenpeace Schweiz",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
 	"scripts": {

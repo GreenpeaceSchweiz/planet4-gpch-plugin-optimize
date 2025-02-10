@@ -28,8 +28,8 @@ import './editor.scss';
 import { PanelBody, TextControl, ToggleControl } from '@wordpress/components';
 
 const INNER_BLOCK_TEMPLATE = [
-	[ 'planet4-gpch-ab-testing/variant', { name: 'Variant A' } ],
-	[ 'planet4-gpch-ab-testing/variant', { name: 'Variant B' } ],
+	[ 'planet4-gpch-plugin-optimize/variant', { name: 'Variant A' } ],
+	[ 'planet4-gpch-plugin-optimize/variant', { name: 'Variant B' } ],
 ];
 
 /**
@@ -72,13 +72,13 @@ export default function Edit( { attributes, setAttributes } ) {
 		<>
 			<InspectorControls>
 				<PanelBody
-					title={ __( 'Settings', 'planet4-gpch-ab-testing' ) }
+					title={ __( 'Settings', 'planet4-gpch-plugin-optimize' ) }
 				>
 					<ToggleControl
 						checked={ !! status }
 						label={ __(
 							'Enable/Disable the Optimization',
-							'planet4-gpch-ab-testing'
+							'planet4-gpch-plugin-optimize'
 						) }
 						onChange={ () =>
 							setAttributes( {
@@ -87,7 +87,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 						help={ __(
 							'Disabling the Optimization will show the first variant to everyone.',
-							'planet4-gpch-ab-testing'
+							'planet4-gpch-plugin-optimize'
 						) }
 					/>
 					<p>
@@ -99,7 +99,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						__next40pxDefaultSize
 						label={ __(
 							'Experiment Name',
-							'planet4-gpch-ab-testing'
+							'planet4-gpch-plugin-optimize'
 						) }
 						value={ optimizationName || '' }
 						onChange={ ( value ) => {
@@ -109,14 +109,14 @@ export default function Edit( { attributes, setAttributes } ) {
 								alert(
 									__(
 										'Please use only letters, numbers, spaces and dashes.',
-										'planet4-gpch-ab-testing'
+										'planet4-gpch-plugin-optimize'
 									)
 								);
 							}
 						} }
 						help={ __(
 							"Used to identify the Optimization. Don't change once the experiment has started!",
-							'planet4-gpch-ab-testing'
+							'planet4-gpch-plugin-optimize'
 						) }
 					/>
 				</PanelBody>

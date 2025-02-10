@@ -65,7 +65,7 @@ export default function Edit( { attributes, setAttributes } ) {
 				<PanelBody
 					title={ __(
 						'Variant Settings',
-						'planet4-gpch-ab-testing'
+						'planet4-gpch-plugin-optimize'
 					) }
 				>
 					<p>
@@ -77,7 +77,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						__next40pxDefaultSize
 						label={ __(
 							'Variant Name',
-							'planet4-gpch-ab-testing'
+							'planet4-gpch-plugin-optimize'
 						) }
 						value={ variantName || '' }
 						onChange={ ( value ) =>
@@ -86,7 +86,7 @@ export default function Edit( { attributes, setAttributes } ) {
 					/>
 				</PanelBody>
 				<PanelBody
-					title={ __( 'Targeting', 'planet4-gpch-ab-testing' ) }
+					title={ __( 'Targeting', 'planet4-gpch-plugin-optimize' ) }
 				>
 					<RangeControl
 						__nextHasNoMarginBottom

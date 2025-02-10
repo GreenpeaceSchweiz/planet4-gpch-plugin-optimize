@@ -1,8 +1,8 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "planet4-gpch-ab-testing/content-optimization",
-	"allowedBlocks": [ "planet4-gpch-ab-testing/variant" ],
+	"name": "planet4-gpch-plugin-optimize/content-optimization",
+	"allowedBlocks": [ "planet4-gpch-plugin-optimize/variant" ],
 	"version": "0.1.0",
 	"title": "Content Optimization",
 	"category": "widgets",
@@ -23,7 +23,7 @@
 	"supports": {
 		"html": false
 	},
-	"textdomain": "planet4-gpch-ab-testing",
+	"textdomain": "planet4-gpch-plugin-optimize",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",

@@ -1,6 +1,6 @@
 /* global localStorage, mixpanel */
-const OptimizationFrontend = () => {
-	const optimizationBlocks = document.querySelectorAll(
+const OptimizeFrontend = () => {
+	const optimizeBlocks = document.querySelectorAll(
 		'.gp-optimize-container'
 	);
 
@@ -66,24 +66,24 @@ const OptimizationFrontend = () => {
 	};
 
 	console.log("Starting Optimize");
-	optimizationBlocks.forEach( ( optimizationBlock ) => {
+	optimizeBlocks.forEach( ( optimizeBlock ) => {
 		// Only continue if the experiment is enabled
 		if (
-			optimizationBlock.dataset.status === 'true' &&
-			optimizationBlock.dataset.optimizationId !== undefined
+			optimizeBlock.dataset.status === 'true' &&
+			optimizeBlock.dataset.optimizationId !== undefined
 		) {
-			const variants = optimizationBlock.querySelectorAll(
+			const variants = optimizeBlock.querySelectorAll(
 				'.gp-optimize-variant'
 			);
 
 			const winnerVariantId = chooseVariant(
-				optimizationBlock.dataset.optimizationId,
+				optimizeBlock.dataset.optimizationId,
 				variants
 			);
 
 			let winnerVariant;
 
-			console.log("Winning variant for Optimization " + optimizationBlock.dataset.optimizationId + " is " + winnerVariantId);
+			console.log("Winning variant for Optimization " + optimizeBlock.dataset.optimizationId + " is " + winnerVariantId);
 
 			// Show the winning variant, hide the rest
 			for ( const variant of variants ) {
@@ -99,7 +99,7 @@ const OptimizationFrontend = () => {
 			if ( mixpanel !== undefined ) {
 				mixpanel.track( '$experiment_started', {
 					'Experiment name':
-						optimizationBlock.dataset.optimizationName,
+						optimizeBlock.dataset.optimizationName,
 					'Variant name': winnerVariant.dataset.variantName,
 				} );
 			}
@@ -107,4 +107,4 @@ const OptimizationFrontend = () => {
 	} );
 };
 
-OptimizationFrontend();
+OptimizeFrontend();
