@@ -115,7 +115,7 @@ export default function Edit( { attributes, setAttributes } ) {
 							}
 						} }
 						help={ __(
-							"Used to identify the Optimization. Don't change once the experiment has started!",
+							"Used to identify the Optimization in Mixpanel. Feel free to use a readable name. Don't change once the experiment has started!",
 							'planet4-gpch-plugin-optimize'
 						) }
 					/>

@@ -40,8 +40,7 @@ import { percent } from '@wordpress/icons';
  * @return {Element} Element to render.
  */
 export default function Edit( { attributes, setAttributes } ) {
-	const { variantName, targetPercentage } = attributes;
-	let { variantId } = attributes;
+	let { variantId, variantName, targetPercentage } = attributes;
 
 	if ( variantId === undefined ) {
 		// Generate a random optimizationId
@@ -57,6 +56,14 @@ export default function Edit( { attributes, setAttributes } ) {
 		}
 
 		setAttributes( { variantId } );
+	}
+
+	if ( variantName === undefined ) {
+		variantName = variantId;
+	}
+
+	if ( targetPercentage === undefined ) {
+		targetPercentage = 50;
 	}
 
 	return (
@@ -83,6 +90,10 @@ export default function Edit( { attributes, setAttributes } ) {
 						onChange={ ( value ) =>
 							setAttributes( { variantName: value } )
 						}
+						help={ __(
+							"Used to identify the Variant in Mixpanel. Feel free to use a readable name. Don't change once the experiment has started!",
+							'planet4-gpch-plugin-optimize'
+						) }
 					/>
 				</PanelBody>
 				<PanelBody

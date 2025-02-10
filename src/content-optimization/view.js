@@ -45,9 +45,14 @@ const OptimizeFrontend = () => {
 		// Choose by weighted random
 		const weightedRandomData = [];
 		for ( const variant of variants ) {
+			let weight = parseInt( variant.dataset.targetPercentage )
+			if (isNaN(weight) ){
+				weight = 50;
+			}
+
 			weightedRandomData.push( {
 				variantId: variant.dataset.variantId,
-				weight: parseInt( variant.dataset.targetPercentage ),
+				weight: weight,
 			} );
 		}
 		console.log("Weighted random data: ", weightedRandomData);
