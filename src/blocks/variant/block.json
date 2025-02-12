@@ -28,6 +28,7 @@
 			"type": "number"
 		}
 	},
+	"usesContext": [ "content-optimization/editorSelectedVariantId" ],
 	"supports": {
 		"html": false
 	},

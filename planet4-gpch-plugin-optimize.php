@@ -31,8 +31,8 @@ function planet4_gpch_plugin_optimize_init() {
 	$enable_blocks  = isset( $plugin_options['enable_blocks'] ) ? (bool) $plugin_options['enable_blocks'] : false;
 
 	if ( $enable_blocks ) {
-		register_block_type( __DIR__ . '/build/content-optimization' );
-		register_block_type( __DIR__ . '/build/variant' );
+		register_block_type( __DIR__ . '/build/blocks/content-optimization' );
+		register_block_type( __DIR__ . '/build/blocks/variant' );
 	}
 }
 add_action( 'init', 'planet4_gpch_plugin_optimize_init' );

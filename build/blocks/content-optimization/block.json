@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "planet4-gpch-plugin-optimize/content-optimization",
+  "allowedBlocks": [
+    "planet4-gpch-plugin-optimize/variant"
+  ],
+  "version": "0.1.0",
+  "title": "Content Optimization",
+  "category": "widgets",
+  "description": "Container block for optimization variants.",
+  "keywords": [
+    "a/b",
+    "ab",
+    "test",
+    "experiment",
+    "personalization"
+  ],
+  "example": {},
+  "attributes": {
+    "status": {
+      "type": "boolean"
+    },
+    "optimizationId": {
+      "type": "string"
+    },
+    "optimizationName": {
+      "type": "string"
+    },
+    "editorSelectedVariantId": {
+      "type": "string"
+    },
+    "editorSelectedVariantIndex": {
+      "type": "integer",
+      "default": 0
+    }
+  },
+  "providesContext": {
+    "content-optimization/editorSelectedVariantId": "editorSelectedVariantId"
+  },
+  "supports": {
+    "html": false
+  },
+  "textdomain": "planet4-gpch-plugin-optimize",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js"
+}

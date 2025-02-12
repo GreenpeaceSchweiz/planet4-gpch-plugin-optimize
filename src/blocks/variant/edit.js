@@ -1,31 +1,15 @@
-/**
- * Retrieves the translation of text.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
- */
 import { __ } from '@wordpress/i18n';
 
-/**
- * React hook that is used to mark the block wrapper element.
- * It provides all the necessary props like the class name.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
- */
 import {
 	InnerBlocks,
 	InspectorControls,
 	useBlockProps,
 } from '@wordpress/block-editor';
 
-/**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
- * Those files can contain any CSS code that gets applied to the editor.
- *
- * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
- */
 import './editor.scss';
 
 import { PanelBody, RangeControl, TextControl } from '@wordpress/components';
+
 import { percent } from '@wordpress/icons';
 
 /**
@@ -35,11 +19,12 @@ import { percent } from '@wordpress/icons';
  * @param {Object}   root0
  * @param {Object}   root0.attributes
  * @param {Function} root0.setAttributes
+ * @param {Object}   root0.context
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  *
  * @return {Element} Element to render.
  */
-export default function Edit( { attributes, setAttributes } ) {
+export default function Edit( { attributes, setAttributes, context } ) {
 	let { variantId, variantName, targetPercentage } = attributes;
 
 	if ( variantId === undefined ) {
@@ -134,8 +119,15 @@ export default function Edit( { attributes, setAttributes } ) {
 					/>
 				</PanelBody>
 			</InspectorControls>
-			<div { ...useBlockProps() }>
-				<InnerBlocks />
+			<div>
+				{ attributes.variantId ===
+					context[
+						'content-optimization/editorSelectedVariantId'
+					] && (
+					<div { ...useBlockProps() }>
+						<InnerBlocks />
+					</div>
+				) }
 			</div>
 		</>
 	);

@@ -18,7 +18,17 @@
 		},
 		"optimizationName": {
 			"type": "string"
+		},
+		"editorSelectedVariantId": {
+			"type": "string"
+		},
+		"editorSelectedVariantIndex": {
+			"type": "integer",
+			"default": 0
 		}
+	},
+	"providesContext": {
+		"content-optimization/editorSelectedVariantId": "editorSelectedVariantId"
 	},
 	"supports": {
 		"html": false

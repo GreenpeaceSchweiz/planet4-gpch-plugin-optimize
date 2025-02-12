@@ -1,0 +1,62 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-planet4-gpch-plugin-optimize-content-optimization {
+	border: 1px dashed rgb(17, 17, 17);
+
+	.variant-button {
+		margin-right: 0.2rem;
+
+		&.is-active {
+			background-color: #007cba;
+			color: #fff;
+		}
+	}
+
+	.add-variant-button {
+		margin-left: 1rem;
+	}
+
+	.variant-selector-container {
+		padding: 0.5rem;
+		border-bottom: 1px dashed rgb(17, 17, 17);
+		background-color: #f3f3f3;
+
+		p {
+			font-size: 13px;
+
+			strong {
+				font-weight: 700;
+			}
+
+			&.optimization-info {
+				margin: 0 0 0.5em 0;
+			}
+
+			&.optimization-disabled {
+				margin: 0.8em 0 0 0;
+				color: #f00;
+			}
+		}
+
+		.variant-buttons {
+
+			.icon {
+				height: 20px;
+				padding: 2px;
+			}
+
+			.is-active {
+
+				.icon {
+					filter: invert(100%) brightness(250%);
+				}
+			}
+		}
+	}
+
+
+}
