@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once 'classes/class-settingspage.php';
+require_once 'classes/class-editorintegration.php';
 
 /**
  * Registers the block using the metadata loaded from the `block.json` file.

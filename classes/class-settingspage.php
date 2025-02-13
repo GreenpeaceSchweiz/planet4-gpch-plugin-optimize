@@ -14,12 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Provides a WordPress admin settings page for the plugin.
  */
-class SettingsPage {
-
+final class SettingsPage {
 	/**
-	 * Holds the singleton instance of the class.
+	 * The single instance of the class.
 	 *
-	 * @var $instance
+	 * @var SettingsPage $instance
 	 */
 	private static $instance = null;
 
@@ -35,7 +34,7 @@ class SettingsPage {
 	 *
 	 * @return self|null
 	 */
-	public static function get_instance() {
+	public static function get_instance(): SettingsPage {
 		if ( self::$instance === null ) {
 			self::$instance = new self();
 		}
@@ -49,6 +48,7 @@ class SettingsPage {
 	 */
 	private function __construct() {
 		$this->options = get_option( 'planet4_gpch_plugin_optimize_settings' );
+
 		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 	}
