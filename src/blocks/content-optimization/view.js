@@ -1,4 +1,4 @@
-/* global localStorage, mixpanel */
+/* global localStorage, Planet4GpchPluginOptimizeSettings */
 const OptimizeFrontend = () => {
 	const optimizeBlocks = document.querySelectorAll(
 		'.gp-optimize-container'
@@ -105,12 +105,33 @@ const OptimizeFrontend = () => {
 				}
 			}
 
-			// Send an event to Mixpanel
-			if ( typeof mixpanel !== 'undefined' ) {
-				mixpanel.track( '$experiment_started', {
-					'Experiment name': optimizeBlock.dataset.optimizationName,
-					'Variant name': winnerVariant.dataset.variantName,
-				} );
+			// Send an experiment info to either Mixpanel or dataLayer
+			const optimizationName =
+				optimizeBlock.dataset.optimizationName ||
+				optimizeBlock.dataset.optimizationId;
+
+			if ( typeof Planet4GpchPluginOptimizeSettings !== 'undefined' ) {
+				if (
+					Planet4GpchPluginOptimizeSettings.event_type === 'mixpanel'
+				) {
+					if ( typeof window.mixpanel !== 'undefined' ) {
+						console.log( 'Sending event to Mixpanel' );
+						window.mixpanel.track( '$experiment_started', {
+							'Experiment name': optimizationName,
+							'Variant name': winnerVariant.dataset.variantName,
+						} );
+					}
+				} else if (
+					Planet4GpchPluginOptimizeSettings.event_type === 'datalayer'
+				) {
+					window.dataLayer = window.dataLayer || [];
+					console.log( 'Sending event to DataLayer' );
+					window.dataLayer.push( {
+						event: Planet4GpchPluginOptimizeSettings.datalayer_event_name,
+						experiment_name: optimizationName,
+						variant_name: winnerVariant.dataset.variantName,
+					} );
+				}
 			}
 		}
 	} );
