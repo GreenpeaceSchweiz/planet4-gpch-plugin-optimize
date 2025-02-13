@@ -1,4 +1,8 @@
 {
+	"name": "greenpeace/planet4-gpch-plugin-optimize",
+	"description": "A/B Testing and Personalization for Planet4 and Mixpanel",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
 	"require-dev": {
 		"wp-coding-standards/wpcs": "^3.0"
 	},
