@@ -39,16 +39,16 @@ final class EditorIntegration {
 	 */
 	private function __construct() {
 		add_filter( 'allowed_block_types_all', array( $this, 'filter_allowed_block_types' ), 50, 2 );
+		add_action( 'init', array( $this, 'register_editor_assets' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_assets' ) );
 	}
 
 	/**
 	 * Filters the allowed block types and adds the plugin's blocks to the allowlist.
 	 *
-	 * @param array|string|bool       $allowed_block_types Array of block type slugs, or true/false for all/none.
-	 * @param WP_Block_Editor_Context $block_editor_context Context for the block editor.
-	 * @return array|string|bool Modified allowed block types.
+	 * @param array|string|bool $allowed_block_types Array of block type slugs, or true/false for all/none.
 	 */
-	public function filter_allowed_block_types( $allowed_block_types, $block_editor_context ) {
+	public function filter_allowed_block_types( $allowed_block_types ) {
 		// Define the block slugs to add to the allowlist.
 		$plugin_blocks = array(
 			'planet4-gpch-plugin-optimize/content-optimization',
@@ -63,6 +63,43 @@ final class EditorIntegration {
 		// In all other cases, return as is.
 		// Most common case is that $allowed_block_types is true (allow all). In that case, we don't need to add anything.
 		return $allowed_block_types;
+	}
+
+	/**
+	 * Registers scripts for integration with the WordPress editor.
+	 *
+	 * @return void
+	 */
+	public function register_editor_assets() {
+
+		wp_register_script(
+			'gpch-optimize-plugin-sidebar-js',
+			plugins_url( 'build/editor/document-setting-panel.js', PLANET4_GPCH_PLUGIN_OPTIMIZE_NAME ),
+			array( 'wp-plugins', 'wp-editor', 'react', 'wp-components', 'wp-data' ),
+			filemtime( dirname( __DIR__, 1 ) . '/build/editor/document-setting-panel.js' ),
+			true,
+		);
+	}
+
+	/**
+	 * Enqueues the necessary JavaScript and CSS assets for the editor.
+	 *
+	 * @return void
+	 */
+	public function enqueue_editor_assets() {
+		$plugin_options           = get_option( 'planet4_gpch_plugin_optimize_settings' );
+		$enable_split_url_testing = isset( $plugin_options['split_url_testing'] ) ? (bool) $plugin_options['split_url_testing'] : false;
+
+		if ( $enable_split_url_testing ) {
+			wp_enqueue_script( 'gpch-optimize-plugin-sidebar-js' );
+
+			wp_enqueue_style(
+				'gpch-optimize-plugin-sidebar-css',
+				plugins_url( 'build/editor/style-document-setting-panel.css', PLANET4_GPCH_PLUGIN_OPTIMIZE_NAME ),
+				array(),
+				filemtime( dirname( __DIR__, 1 ) . '/build/editor/style-document-setting-panel.css' ),
+			);
+		}
 	}
 }
 
