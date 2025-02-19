@@ -47,6 +47,12 @@
 			.icon {
 				height: 20px;
 				padding: 2px;
+
+				/* Planet4 styles reset */
+				position: unset;
+				width: unset;
+				top: unset;
+				box-sizing: unset;
 			}
 
 			.is-active {
