@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 define( 'PLANET4_GPCH_PLUGIN_OPTIMIZE_NAME', basename( __DIR__ ) . '/' . basename( __FILE__ ) );
-define( 'PLUGIN_FILE_PATH', __FILE__);
+define( 'PLUGIN_FILE_PATH', __FILE__ );
 
 require_once 'classes/class-settingspage.php';
 require_once 'classes/class-editorintegration.php';

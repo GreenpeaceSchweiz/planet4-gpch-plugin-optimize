@@ -47,10 +47,46 @@ final class SettingsPage {
 	 * @return void
 	 */
 	private function __construct() {
+		register_activation_hook( PLUGIN_FILE_PATH, array( &$this, 'plugin_activate' ) );
+
 		$this->options = get_option( 'planet4_gpch_plugin_optimize_settings' );
 
+		add_filter( 'plugin_action_links_' . plugin_basename( PLANET4_GPCH_PLUGIN_OPTIMIZE_NAME ), array( $this, 'add_plugin_action_links' ) );
 		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+	}
+
+	/**
+	 * Sets defaults for settings when plugin is activated.
+	 *
+	 * @return void
+	 */
+	public function plugin_activate() {
+		$default_settings = array(
+			'enable_blocks'        => '1',
+			'split_url_testing'    => '1',
+			'event_type'           => 'mixpanel',
+			'datalayer_event_name' => 'experiment_started',
+		);
+
+		// Set default settings
+		add_option( 'planet4_gpch_plugin_optimize_settings', $default_settings );
+	}
+
+	/**
+	 * Adds a settings link to the plugin action links on the plugins page.
+	 *
+	 * @param array $plugin_actions The existing plugin action links.
+	 * @return array The modified plugin action links with the settings link added.
+	 */
+	public function add_plugin_action_links( $plugin_actions ) {
+		$plugin_actions[] = sprintf(
+			'<a href="%s">%s</a>',
+			esc_url( admin_url( 'admin.php?page=planet4-gpch-optimize-settings' ) ),
+			__( 'Settings', 'planet4-gpch-plugin-optimize' )
+		);
+
+		return $plugin_actions;
 	}
 
 	/**
