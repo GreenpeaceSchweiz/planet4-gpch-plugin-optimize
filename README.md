@@ -1,6 +1,7 @@
 # Planet4 GPCH Optimize Plugin
 
-<span style="color:red;">This plugin is still in alpha stage and not ready for production use.</span>
+> [!CAUTION]
+> **This plugin is still in alpha stage and not ready for production use.**
 
 Testing and personalization functionality for WordPress/Planet4 websites that use Mixpanel for web analytics.
 
