@@ -10,7 +10,7 @@ import './style.scss';
 const PluginDocumentSettingPanelOptimize = () => (
 	<PluginDocumentSettingPanel
 		name="planet4-gpch-plugin-optimize-setting-panel"
-		title="Optimize Experiment"
+		title="Split URL Experiment"
 		className="planet4-gpch-plugin-optimize-setting-panel"
 		icon={ optimizeIcon }
 	>

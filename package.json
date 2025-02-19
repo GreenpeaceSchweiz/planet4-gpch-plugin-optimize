@@ -11,6 +11,7 @@
 		"format:php": "vendor/bin/phpcbf --standard=WordPress --extensions=php ./classes/ planet4-gpch-plugin-optimize.php",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
+		"lint:md": "wp-scripts lint-md-docs",
 		"lint:php": "vendor/bin/phpcs -ps --standard=WordPress --extensions=php ./classes/ planet4-gpch-plugin-optimize.php",
 		"fix:js": "wp-scripts lint-js --fix",
 		"packages-update": "wp-scripts packages-update",
