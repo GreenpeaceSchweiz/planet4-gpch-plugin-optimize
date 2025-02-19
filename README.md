@@ -26,7 +26,7 @@ It only works in conjunction with the [Mixpanel experiments](https://docs.mixpan
 
 ## Documentation
 
-- [Setup](documentation/setup)
+- [Setup](documentation/setup.md)
 - [Setting up an in-page experiment](documentation/setting-up-an-experiment.md)
 - [Using split URL tests](documentation/using-split-url-tests.md)
 - [Evaluating experiments in Mixpanel](documentation/evaluating-experiments-in-mixpanel.md)
