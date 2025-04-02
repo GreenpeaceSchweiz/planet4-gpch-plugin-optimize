@@ -29,7 +29,7 @@ const VariantTargeting = ( { conditionals, setAttributes } ) => {
 		setAttributes( { conditionals: updatedConditionals } );
 		setConditionalsCount( updatedConditionals.length );
 	};
-	
+
 	return (
 		<>
 			<PanelBody>

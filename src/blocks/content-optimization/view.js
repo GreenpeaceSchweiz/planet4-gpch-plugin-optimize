@@ -22,55 +22,137 @@ const OptimizeFrontend = () => {
 	};
 
 	/**
+	 * Compares a URL query parameter value against a specified value using a given operator.
+	 *
+	 * @param {string} name      The name of the URL parameter to be matched.
+	 * @param {string} value     The value to compare the parameter value against.
+	 * @param {string} operator  The comparison operator to use. Valid operators include:
+	 *                             'is' (checks if the parameter value is equal to the given value),
+	 *                             'is_not' (checks if the parameter value is not equal to the given value),
+	 *                             'contains' (checks if the parameter value contains the given value),
+	 *                             'does_not_contain' (checks if the parameter value does not contain the given value).
+	 *
+	 * @return {boolean} Returns true if the comparison matches based on the operator, otherwise false.
+	 */
+	const matchURLParameters = ( name, value, operator ) => {
+		const urlParams = new URLSearchParams( window.location.search );
+		const paramValue = urlParams.get( name );
+
+		if ( operator === 'is' ) {
+			if ( paramValue && paramValue === value ) {
+				return true;
+			}
+		} else if ( operator === 'is_not' ) {
+			if ( paramValue && paramValue !== value ) {
+				return true;
+			}
+		} else if ( operator === 'contains' ) {
+			if ( paramValue && paramValue.includes( value ) ) {
+				return true;
+			}
+		} else if ( operator === 'does_not_contain' ) {
+			if ( paramValue && ! paramValue.includes( value ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	};
+
+	/**
 	 * Select a variant using the targeting specifications in variantTargeting
 	 *
 	 * @param {string} optimizationId
 	 * @param {Array}  variants
 	 */
 	const chooseVariant = ( optimizationId, variants ) => {
-		const storedVariant = localStorage.getItem(
-			'gp-optimize-' + optimizationId
-		);
+		let winningVariantId = null;
 
-		if ( storedVariant !== undefined ) {
-			// Return the stored variant only if it still exists
-			for ( const variant of variants ) {
-				if ( variant.dataset.variantId === storedVariant ) {
-					console.log( 'Found stored variant ID: ', storedVariant );
-					return storedVariant;
+		// Check the conditions in variants and if and of them are met, force showing that variant.
+		// Forced variants have priority over all other selection mechanisms.
+		variantLoop: for ( const variant of variants ) {
+			if ( variant.dataset.conditionals !== undefined ) {
+				const variantConditionals = JSON.parse(
+					variant.dataset.conditionals
+				);
+
+				if ( typeof variantConditionals === 'object' ) {
+					for ( const condition of variantConditionals ) {
+						if ( condition.type === 'url_parameter' ) {
+							const result = matchURLParameters(
+								condition.conditionalKey,
+								condition.value,
+								condition.operator
+							);
+
+							if ( result === true ) {
+								winningVariantId = variant.dataset.variantId;
+								console.log(
+									'Selected winning variant by URL parameter conditional',
+									condition.conditionalKey,
+									condition.operator,
+									condition.value,
+									winningVariantId
+								);
+								break variantLoop;
+							}
+						}
+					}
 				}
 			}
 		}
+		
+		// If no variant is forced, apply all other selection mechanisms
+		if ( winningVariantId === null ) {
+			// If the user has seen this optimization before, we've stored the variant and need to show the same one again.
+			const storedVariant = localStorage.getItem(
+				'gp-optimize-' + optimizationId
+			);
 
-		// Choose by weighted random
-		const weightedRandomData = [];
-		for ( const variant of variants ) {
-			let weight = parseInt( variant.dataset.targetPercentage );
-			if ( isNaN( weight ) ) {
-				weight = 50;
+			if ( storedVariant !== undefined ) {
+				// Return the stored variant, but only if it still exists
+				for ( const variant of variants ) {
+					if ( variant.dataset.variantId === storedVariant ) {
+						console.log( 'Found stored variant ID: ', storedVariant );
+
+						return storedVariant;
+					}
+				}
 			}
 
-			weightedRandomData.push( {
-				variantId: variant.dataset.variantId,
-				weight,
-			} );
-		}
-		console.log( 'Weighted random data: ', weightedRandomData );
+			// If no variant is selected by now, choose by weighted random (with the weights set in the variants)
+			const weightedRandomData = [];
+			for ( const variant of variants ) {
+				let weight = parseInt( variant.dataset.targetPercentage );
+				if ( isNaN( weight ) ) {
+					weight = 50;
+				}
 
-		const winningVariant = selectWeightedRandomItem( weightedRandomData );
+				weightedRandomData.push( {
+					variantId: variant.dataset.variantId,
+					weight,
+				} );
+			}
+			console.log( 'Selected winning variant by weighted random. ' );
+
+			const winningVariant = selectWeightedRandomItem( weightedRandomData );
+
+			winningVariantId = winningVariant.variantId;
+		}
 
 		// Save to local storage
 		localStorage.setItem(
 			'gp-optimize-' + optimizationId,
-			winningVariant.variantId
+			winningVariantId
 		);
 
-		console.log( 'Selected winning variant: ', winningVariant.variantId );
+		console.log( 'Selected winning variant: ', winningVariantId );
 
-		return winningVariant.variantId;
+		return winningVariantId;
 	};
 
 	console.log( 'Starting Optimize' );
+
 	optimizeBlocks.forEach( ( optimizeBlock ) => {
 		// Only continue if the experiment is enabled
 		if (

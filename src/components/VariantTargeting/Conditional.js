@@ -61,10 +61,10 @@ const Conditional = ( {
 									<code>{ conditionalKey }</code>
 									<span>
 										{ operator === 'is' && ' == ' }
-										{ operator === 'is-not' && ' != ' }
+										{ operator === 'is_not' && ' != ' }
 										{ operator === 'contains' &&
 											' contains ' }
-										{ operator === 'does-not-contain' &&
+										{ operator === 'does_not_contain' &&
 											' does not contain ' }
 									</span>
 									<code>{ value }</code>
@@ -127,7 +127,7 @@ const Conditional = ( {
 										'is not (!=)',
 										'planet4-gpch-plugin-optimize'
 									),
-									value: 'is-not',
+									value: 'is_not',
 								},
 								{
 									label: __(
@@ -141,7 +141,7 @@ const Conditional = ( {
 										'does not contain',
 										'planet4-gpch-plugin-optimize'
 									),
-									value: 'does-not-contain',
+									value: 'does_not_contain',
 								},
 							] }
 						/>
