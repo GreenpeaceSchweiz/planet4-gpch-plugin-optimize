@@ -12,6 +12,7 @@ const Conditional = ( {
 	onRemoveConditional,
 } ) => {
 	const [ type, setType ] = useState( 'url_parameter' );
+	const [ typeSelection, setTypeSelection ] = useState();
 	const [ conditionalKey, setConditionalKey ] = useState(
 		conditional.conditionalKey || ''
 	);
@@ -21,6 +22,37 @@ const Conditional = ( {
 	const [ showDetails, setShowDetails ] = useState(
 		conditional.showDetails ?? false
 	);
+
+	// Initialize typeSelection
+	if ( typeof typeSelection === 'undefined' ) {
+		if ( conditionalKey === 'utm_medium' ) {
+			setTypeSelection( 'utm_medium' );
+		} else if ( conditionalKey === 'utm_source' ) {
+			setTypeSelection( 'utm_source' );
+		} else if ( conditionalKey === 'utm_campaign' ) {
+			setTypeSelection( 'utm_campaign' );
+		}
+	}
+
+	const onTypeSelection = ( selected ) => {
+		// Handle presets
+		if ( selected === 'utm_medium' ) {
+			setType( 'url_parameter' );
+			setTypeSelection( selected );
+			setConditionalKey( 'utm_medium' );
+		} else if ( selected === 'utm_source' ) {
+			setType( 'url_parameter' );
+			setTypeSelection( selected );
+			setConditionalKey( 'utm_source' );
+		} else if ( selected === 'utm_campaign' ) {
+			setType( 'url_parameter' );
+			setTypeSelection( selected );
+			setConditionalKey( 'utm_campaign' );
+		} else {
+			setTypeSelection( selected );
+			setType( selected );
+		}
+	};
 
 	const onSaveConditional = () => {
 		setShowDetails( false );
@@ -33,6 +65,7 @@ const Conditional = ( {
 			showDetails: false,
 		} );
 	};
+
 	return (
 		<>
 			{ showDetails === false && (
@@ -56,7 +89,28 @@ const Conditional = ( {
 					<div className="info">
 						{ type === 'url_parameter' && (
 							<>
-								<p>URL Parameter:</p>
+								<p>
+									{ typeSelection === 'utm_medium' &&
+										__(
+											'UTM Medium in URL:',
+											'planet4-gpch-plugin-optimize'
+										) }
+									{ typeSelection === 'utm_source' &&
+										__(
+											'UTM Source in URL:',
+											'planet4-gpch-plugin-optimize'
+										) }
+									{ typeSelection === 'utm_campaign' &&
+										__(
+											'UTM Campaign in URL:',
+											'planet4-gpch-plugin-optimize'
+										) }
+									{ typeSelection === 'url_parameter' &&
+										__(
+											'URL Parameter:',
+											'planet4-gpch-plugin-optimize'
+										) }
+								</p>
 								<p>
 									<code>{ conditionalKey }</code>
 									<span>
@@ -83,7 +137,7 @@ const Conditional = ( {
 							'Force this variant when',
 							'planet4-gpch-plugin-optimize'
 						) }
-						onChange={ setType }
+						onChange={ onTypeSelection }
 						options={ [
 							{
 								label: __(
@@ -92,19 +146,45 @@ const Conditional = ( {
 								),
 								value: 'url_parameter',
 							},
+							{
+								label: __(
+									'utm_medium in URL',
+									'planet4-gpch-plugin-optimize'
+								),
+								value: 'utm_medium',
+							},
+							{
+								label: __(
+									'utm_source in URL',
+									'planet4-gpch-plugin-optimize'
+								),
+								value: 'utm_source',
+							},
+							{
+								label: __(
+									'utm_campaign in URL',
+									'planet4-gpch-plugin-optimize'
+								),
+								value: 'utm_campaign',
+							},
 						] }
+						value={ typeSelection }
 					/>
 					<div className="conditional-details">
-						<TextControl
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
-							label={ __(
-								'Key',
-								'planet4-gpch-plugin-optimize'
+						{ typeSelection !== 'utm_medium' &&
+							typeSelection !== 'utm_source' &&
+							typeSelection !== 'utm_campaign' && (
+								<TextControl
+									__next40pxDefaultSize
+									__nextHasNoMarginBottom
+									label={ __(
+										'Key',
+										'planet4-gpch-plugin-optimize'
+									) }
+									onChange={ setConditionalKey }
+									value={ conditionalKey }
+								/>
 							) }
-							onChange={ setConditionalKey }
-							value={ conditionalKey }
-						/>
 						<SelectControl
 							__next40pxDefaultSize
 							__nextHasNoMarginBottom
