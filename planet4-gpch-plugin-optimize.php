@@ -98,6 +98,11 @@ function planet4_gpch_plugin_optimize_add_inline_script() {
 		wp_add_inline_script( 'planet4-gpch-plugin-optimize-split-url-script', $script, 'before' );
 	}
 
+	global $wp_scripts;
+
+	// Remove the "defer" loading strategy from the view script. The script needs to run earlier in order to prevent content flicker.
+	unset( $wp_scripts->registered['planet4-gpch-plugin-optimize-content-optimization-view-script']->extra['strategy'] );
+
 	// Scripts and data for content block optimizations
 	if ( $post_has_block ) {
 		$localized_data_optimization_view = array(
@@ -112,7 +117,7 @@ function planet4_gpch_plugin_optimize_add_inline_script() {
 	}
 }
 
-add_action( 'wp_enqueue_scripts', 'planet4_gpch_plugin_optimize_add_inline_script' );
+add_action( 'wp_enqueue_scripts', 'planet4_gpch_plugin_optimize_add_inline_script', 50 );
 
 
 

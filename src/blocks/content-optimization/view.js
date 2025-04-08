@@ -1,8 +1,35 @@
-/* global localStorage, Planet4GpchPluginOptimizeSettings */
-const OptimizeFrontend = () => {
-	const optimizeBlocks = document.querySelectorAll(
-		'.gp-optimize-container'
-	);
+/* global localStorage, MutationObserver, Planet4GpchPluginOptimizeSettings */
+
+/**
+ * The main function handling frontend optimizations.
+ */
+const gpOptimizeFrontend = () => {
+	/**
+	 * Waits for an element specified by a CSS selector to be available in the DOM and resolves a promise with the element.
+	 * If the element already exists, the promise resolves immediately. Otherwise, it observes changes in the DOM and resolves when the element is added.
+	 *
+	 * @param {string} selector - The CSS selector of the element to wait for.
+	 * @return {Promise<Element>} A promise that resolves with the matching HTML element once it is available in the DOM.
+	 */
+	const waitForElement = ( selector ) => {
+		return new Promise( ( resolve ) => {
+			if ( document.querySelector( selector ) ) {
+				return resolve( document.querySelector( selector ) );
+			}
+
+			const observer = new MutationObserver( () => {
+				if ( document.querySelector( selector ) ) {
+					observer.disconnect();
+					resolve( document.querySelector( selector ) );
+				}
+			} );
+
+			observer.observe( document.documentElement, {
+				childList: true,
+				subtree: true,
+			} );
+		} );
+	};
 
 	/**
 	 * Returns a weighted random element from an array.
@@ -101,7 +128,7 @@ const OptimizeFrontend = () => {
 				}
 			}
 		}
-		
+
 		// If no variant is forced, apply all other selection mechanisms
 		if ( winningVariantId === null ) {
 			// If the user has seen this optimization before, we've stored the variant and need to show the same one again.
@@ -113,7 +140,10 @@ const OptimizeFrontend = () => {
 				// Return the stored variant, but only if it still exists
 				for ( const variant of variants ) {
 					if ( variant.dataset.variantId === storedVariant ) {
-						console.log( 'Found stored variant ID: ', storedVariant );
+						console.log(
+							'Found stored variant ID: ',
+							storedVariant
+						);
 
 						return storedVariant;
 					}
@@ -135,7 +165,8 @@ const OptimizeFrontend = () => {
 			}
 			console.log( 'Selected winning variant by weighted random. ' );
 
-			const winningVariant = selectWeightedRandomItem( weightedRandomData );
+			const winningVariant =
+				selectWeightedRandomItem( weightedRandomData );
 
 			winningVariantId = winningVariant.variantId;
 		}
@@ -151,72 +182,91 @@ const OptimizeFrontend = () => {
 		return winningVariantId;
 	};
 
-	console.log( 'Starting Optimize' );
+	/**
+	 * CSS selector fof the optimize container element.
+	 *
+	 * @type {string}
+	 */
+	const containerSelector = '.gp-optimize-container';
 
-	optimizeBlocks.forEach( ( optimizeBlock ) => {
-		// Only continue if the experiment is enabled
-		if (
-			optimizeBlock.dataset.status === 'true' &&
-			optimizeBlock.dataset.optimizationId !== undefined
-		) {
-			const variants = optimizeBlock.querySelectorAll(
-				'.gp-optimize-variant'
-			);
+	// Run the frontend script as soon as an experiment container becomes available.
+	waitForElement( containerSelector ).then( () => {
+		const optimizeBlocks = document.querySelectorAll( containerSelector );
 
-			const winnerVariantId = chooseVariant(
-				optimizeBlock.dataset.optimizationId,
-				variants
-			);
+		console.log( 'Starting Optimize for blocks: ', optimizeBlocks );
 
-			let winnerVariant;
+		optimizeBlocks.forEach( ( optimizeBlock ) => {
+			// Only continue if the experiment is enabled
+			if (
+				optimizeBlock.dataset.status === 'true' &&
+				optimizeBlock.dataset.optimizationId !== undefined
+			) {
+				const variants = optimizeBlock.querySelectorAll(
+					'.gp-optimize-variant'
+				);
 
-			console.log(
-				'Winning variant for Optimization ' +
-					optimizeBlock.dataset.optimizationId +
-					' is ' +
-					winnerVariantId
-			);
+				console.log( 'Variants: ', variants );
 
-			// Show the winning variant, hide the rest
-			for ( const variant of variants ) {
-				if ( variant.dataset.variantId === winnerVariantId ) {
-					variant.style.display = 'block';
-					winnerVariant = variant;
-				} else {
-					variant.style.display = 'none';
+				const winnerVariantId = chooseVariant(
+					optimizeBlock.dataset.optimizationId,
+					variants
+				);
+
+				let winnerVariant;
+
+				console.log(
+					'Winning variant for Optimization ' +
+						optimizeBlock.dataset.optimizationId +
+						' is ' +
+						winnerVariantId
+				);
+
+				// Show the winning variant, hide the rest
+				for ( const variant of variants ) {
+					if ( variant.dataset.variantId === winnerVariantId ) {
+						variant.style.display = 'block';
+						winnerVariant = variant;
+					} else {
+						variant.style.display = 'none';
+					}
 				}
-			}
 
-			// Send an experiment info to either Mixpanel or dataLayer
-			const optimizationName =
-				optimizeBlock.dataset.optimizationName ||
-				optimizeBlock.dataset.optimizationId;
+				// Send an experiment info to either Mixpanel or dataLayer
+				const optimizationName =
+					optimizeBlock.dataset.optimizationName ||
+					optimizeBlock.dataset.optimizationId;
 
-			if ( typeof Planet4GpchPluginOptimizeSettings !== 'undefined' ) {
 				if (
-					Planet4GpchPluginOptimizeSettings.event_type === 'mixpanel'
+					typeof Planet4GpchPluginOptimizeSettings !== 'undefined'
 				) {
-					if ( typeof window.mixpanel !== 'undefined' ) {
-						console.log( 'Sending event to Mixpanel' );
-						window.mixpanel.track( '$experiment_started', {
-							'Experiment name': optimizationName,
-							'Variant name': winnerVariant.dataset.variantName,
+					if (
+						Planet4GpchPluginOptimizeSettings.event_type ===
+						'mixpanel'
+					) {
+						if ( typeof window.mixpanel !== 'undefined' ) {
+							console.log( 'Sending event to Mixpanel' );
+							window.mixpanel.track( '$experiment_started', {
+								'Experiment name': optimizationName,
+								'Variant name':
+									winnerVariant.dataset.variantName,
+							} );
+						}
+					} else if (
+						Planet4GpchPluginOptimizeSettings.event_type ===
+						'datalayer'
+					) {
+						window.dataLayer = window.dataLayer || [];
+						console.log( 'Sending event to DataLayer' );
+						window.dataLayer.push( {
+							event: Planet4GpchPluginOptimizeSettings.datalayer_event_name,
+							experiment_name: optimizationName,
+							variant_name: winnerVariant.dataset.variantName,
 						} );
 					}
-				} else if (
-					Planet4GpchPluginOptimizeSettings.event_type === 'datalayer'
-				) {
-					window.dataLayer = window.dataLayer || [];
-					console.log( 'Sending event to DataLayer' );
-					window.dataLayer.push( {
-						event: Planet4GpchPluginOptimizeSettings.datalayer_event_name,
-						experiment_name: optimizationName,
-						variant_name: winnerVariant.dataset.variantName,
-					} );
 				}
 			}
-		}
+		} );
 	} );
 };
 
-OptimizeFrontend();
+gpOptimizeFrontend();
