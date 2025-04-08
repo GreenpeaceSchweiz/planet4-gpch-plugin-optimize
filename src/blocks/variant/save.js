@@ -26,6 +26,7 @@ export default function save( { attributes } ) {
 			data-target-percentage={ attributes.targetPercentage }
 			data-variant-id={ attributes.variantId }
 			data-variant-name={ attributes.variantName }
+			data-conditionals={ JSON.stringify( attributes.conditionals ) }
 		>
 			<InnerBlocks.Content />
 		</div>
