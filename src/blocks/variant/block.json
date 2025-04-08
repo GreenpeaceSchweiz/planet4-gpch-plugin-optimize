@@ -26,6 +26,9 @@
 		},
 		"targetPercentage": {
 			"type": "number"
+		},
+		"conditionals": {
+			"type": "array"
 		}
 	},
 	"usesContext": [ "content-optimization/editorSelectedVariantId" ],
