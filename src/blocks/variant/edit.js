@@ -1,16 +1,15 @@
 import { __ } from '@wordpress/i18n';
-
+import { percent } from '@wordpress/icons';
 import {
 	InnerBlocks,
 	InspectorControls,
 	useBlockProps,
 } from '@wordpress/block-editor';
-
-import './editor.scss';
-
 import { PanelBody, RangeControl, TextControl } from '@wordpress/components';
 
-import { percent } from '@wordpress/icons';
+import VariantTargeting from '../../components/VariantTargeting/VariantTargeting';
+
+import './editor.scss';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -25,7 +24,7 @@ import { percent } from '@wordpress/icons';
  * @return {Element} Element to render.
  */
 export default function Edit( { attributes, setAttributes, context } ) {
-	let { variantId, variantName, targetPercentage } = attributes;
+	let { variantId, variantName, targetPercentage, conditionals } = attributes;
 
 	if ( variantId === undefined ) {
 		// Generate a random optimizationId
@@ -49,6 +48,10 @@ export default function Edit( { attributes, setAttributes, context } ) {
 
 	if ( targetPercentage === undefined ) {
 		targetPercentage = 50;
+	}
+
+	if ( conditionals === undefined ) {
+		conditionals = [];
 	}
 
 	return (
@@ -118,6 +121,10 @@ export default function Edit( { attributes, setAttributes, context } ) {
 						trackColor="green"
 					/>
 				</PanelBody>
+				<VariantTargeting
+					conditionals={ conditionals }
+					setAttributes={ setAttributes }
+				/>
 			</InspectorControls>
 			<div>
 				{ attributes.variantId ===

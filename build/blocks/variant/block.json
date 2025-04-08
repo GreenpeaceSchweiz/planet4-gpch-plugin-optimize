@@ -28,6 +28,9 @@
     },
     "targetPercentage": {
       "type": "number"
+    },
+    "conditionals": {
+      "type": "array"
     }
   },
   "usesContext": [
