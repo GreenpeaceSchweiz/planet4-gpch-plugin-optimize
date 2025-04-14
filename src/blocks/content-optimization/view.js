@@ -1,4 +1,4 @@
-/* global localStorage, MutationObserver, Planet4GpchPluginOptimizeSettings */
+/* global localStorage, sessionStorage, MutationObserver, Planet4GpchPluginOptimizeSettings */
 
 /**
  * The main function handling frontend optimizations.
@@ -51,13 +51,13 @@ const gpOptimizeFrontend = () => {
 	/**
 	 * Compares a URL query parameter value against a specified value using a given operator.
 	 *
-	 * @param {string} name      The name of the URL parameter to be matched.
-	 * @param {string} value     The value to compare the parameter value against.
-	 * @param {string} operator  The comparison operator to use. Valid operators include:
-	 *                             'is' (checks if the parameter value is equal to the given value),
-	 *                             'is_not' (checks if the parameter value is not equal to the given value),
-	 *                             'contains' (checks if the parameter value contains the given value),
-	 *                             'does_not_contain' (checks if the parameter value does not contain the given value).
+	 * @param {string} name     The name of the URL parameter to be matched.
+	 * @param {string} value    The value to compare the parameter value against.
+	 * @param {string} operator The comparison operator to use. Valid operators include:
+	 *                          'is' (checks if the parameter value is equal to the given value),
+	 *                          'is_not' (checks if the parameter value is not equal to the given value),
+	 *                          'contains' (checks if the parameter value contains the given value),
+	 *                          'does_not_contain' (checks if the parameter value does not contain the given value).
 	 *
 	 * @return {boolean} Returns true if the comparison matches based on the operator, otherwise false.
 	 */
@@ -87,6 +87,113 @@ const gpOptimizeFrontend = () => {
 	};
 
 	/**
+	 * Evaluates and matches a value stored in localStorage or sessionStorage based on specified criteria.
+	 *
+	 * @param {string} storageType    - The type of storage to check, either 'local_storage' or 'session_storage'.
+	 * @param {string} nameInStorage  - The key name of the value stored in the specified storage.
+	 * @param {string} dataType       - The expected data type of the stored value. Supported data types are 'string', 'comma_separated', or 'object'.
+	 * @param {string} conditionalKey - The key to inspect within the stored object when `dataType` is 'object'.
+	 * @param {string} operator       - The operator to apply for comparison. Supported operators are 'is', 'is_not', 'contains', or 'does_not_contain'.
+	 * @param {string} value          - The value to compare against the stored value based on the specified operator.
+	 * @return {boolean} Returns `true` if the stored value matches the specified criteria; otherwise, returns `false`.
+	 */
+	const matchStorageElements = (
+		storageType,
+		nameInStorage,
+		dataType,
+		conditionalKey,
+		operator,
+		value
+	) => {
+		console.log(
+			storageType,
+			nameInStorage,
+			dataType,
+			conditionalKey,
+			operator,
+			value
+		);
+
+		// Try to find matches in storage (localStorage or sessionStorage)
+		if (
+			storageType === 'local_storage' ||
+			storageType === 'session_storage'
+		) {
+			const storage =
+				storageType === 'local_storage' ? localStorage : sessionStorage;
+			const storedValue = storage.getItem( nameInStorage );
+
+			// Ensure the stored value exists
+			if ( storedValue === null ) {
+				return false;
+			}
+
+			console.log( 'storedValue', storedValue );
+
+			// Process the stored value based on its data type
+			if ( dataType === 'string' ) {
+				if ( operator === 'is' ) {
+					return storedValue === value;
+				} else if ( operator === 'is_not' ) {
+					return storedValue !== value;
+				} else if ( operator === 'contains' ) {
+					return storedValue.includes( value );
+				} else if ( operator === 'does_not_contain' ) {
+					return ! storedValue.includes( value );
+				}
+			} else if ( dataType === 'comma_separated' ) {
+				// Treat value as a comma-separated list
+				const values = storedValue
+					.split( ',' )
+					.map( ( v ) => v.trim() );
+
+				if ( operator === 'contains' ) {
+					return values.includes( value );
+				} else if ( operator === 'does_not_contain' ) {
+					return ! values.includes( value );
+				}
+			} else if ( dataType === 'object' ) {
+				try {
+					const parsedValue = JSON.parse( storedValue );
+
+					// Ensure the parsed value is an object
+					if (
+						typeof parsedValue !== 'object' ||
+						parsedValue === null
+					) {
+						return false;
+					}
+
+					const storedObjectValue = parsedValue[ conditionalKey ];
+
+					// Perform checks based on operator
+					if ( operator === 'is' ) {
+						return storedObjectValue === value;
+					} else if ( operator === 'is_not' ) {
+						return storedObjectValue !== value;
+					} else if (
+						operator === 'contains' &&
+						typeof storedObjectValue === 'string'
+					) {
+						return storedObjectValue.includes( value );
+					} else if (
+						operator === 'does_not_contain' &&
+						typeof storedObjectValue === 'string'
+					) {
+						return ! storedObjectValue.includes( value );
+					}
+				} catch ( error ) {
+					// If JSON parsing fails, return false
+					return false;
+				}
+			}
+		}
+
+		// Return false as a fallback
+		return false;
+	};
+
+	/**
 	 * Select a variant using the targeting specifications in variantTargeting
 	 *
 	 * @param {string} optimizationId
@@ -95,7 +202,7 @@ const gpOptimizeFrontend = () => {
 	const chooseVariant = ( optimizationId, variants ) => {
 		let winningVariantId = null;
 
-		// Check the conditions in variants and if and of them are met, force showing that variant.
+		// Check the conditions in variants and if and of them are met, force show that variant.
 		// Forced variants have priority over all other selection mechanisms.
 		variantLoop: for ( const variant of variants ) {
 			if ( variant.dataset.conditionals !== undefined ) {
@@ -105,24 +212,32 @@ const gpOptimizeFrontend = () => {
 
 				if ( typeof variantConditionals === 'object' ) {
 					for ( const condition of variantConditionals ) {
+						let result = false;
+
 						if ( condition.type === 'url_parameter' ) {
-							const result = matchURLParameters(
+							result = matchURLParameters(
 								condition.conditionalKey,
 								condition.value,
 								condition.operator
 							);
+						} else if (
+							condition.type === 'local_storage' ||
+							condition.type === 'session_storage'
+						) {
+							result = matchStorageElements(
+								condition.type,
+								condition.nameInStorage,
+								condition.dataType,
+								condition.conditionalKey,
+								condition.operator,
+								condition.value
+							);
+						}
 
-							if ( result === true ) {
-								winningVariantId = variant.dataset.variantId;
-								console.log(
-									'Selected winning variant by URL parameter conditional',
-									condition.conditionalKey,
-									condition.operator,
-									condition.value,
-									winningVariantId
-								);
-								break variantLoop;
-							}
+						if ( result === true ) {
+							winningVariantId = variant.dataset.variantId;
+
+							break variantLoop;
 						}
 					}
 				}
