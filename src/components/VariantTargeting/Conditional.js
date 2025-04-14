@@ -5,37 +5,78 @@ import { edit, closeSmall } from '@wordpress/icons';
 
 import './Conditional.css';
 
+/**
+ * A functional component to manage conditionals within the UI.
+ *
+ * @param {Object}   props                     The properties passed to the component.
+ * @param {number}   props.index               The index of the conditional in the list.
+ * @param {Object}   props.conditional         The object representing the conditional state, including keys like `conditionalKey`, `operator`, and `value`.
+ * @param {Function} props.onSaveConditionals  A callback function triggered when the conditional is saved.
+ * @param {Function} props.onRemoveConditional A callback function triggered when the conditional is removed.
+ * @return {JSX.Element}                       A React component that renders the conditional UI with editable fields for type, key, operator, and value.
+ */
 const Conditional = ( {
 	index,
 	conditional,
 	onSaveConditionals,
 	onRemoveConditional,
 } ) => {
-	const [ type, setType ] = useState( 'url_parameter' );
-	const [ typeSelection, setTypeSelection ] = useState();
-	const [ conditionalKey, setConditionalKey ] = useState(
-		conditional.conditionalKey || ''
+	/**
+	 * Type of the conditional. E.g.  url_parameter, local_storage
+	 */
+	const [ type, setType ] = useState( conditional.type ?? 'url_parameter' );
+
+	/**
+	 * Helper for the UI, allows for selecting types with a preset
+	 */
+	const [ typeSelection, setTypeSelection ] = useState(
+		conditional.typeSelection ?? null
 	);
+
+	/**
+	 * Name in the storage, e.g. the name in LocalStorage, SessionStorage or cookie name
+	 */
+	const [ nameInStorage, setNameInStorage ] = useState(
+		conditional.nameInStorage ?? 'gp_optimize_data'
+	);
+
+	/**
+	 * Data type, e.g. string, object, comma_separated
+	 */
+	const [ dataType, setDataType ] = useState(
+		conditional.dataType ?? 'string'
+	);
+
+	/**
+	 * Key of the URL parameter or object (depending on dataType) with the targeting data
+	 */
+	const [ conditionalKey, setConditionalKey ] = useState(
+		conditional.conditionalKey ?? ''
+	);
+
+	/**
+	 * Operator to compare the value against the conditionalKey. E.g. is, is_not, contains, does_not_contain
+	 */
 	const [ operator, setOperator ] = useState( conditional.operator ?? 'is' );
+
+	/**
+	 * Value to look for in the conditionalKey of the targeting data
+	 */
 	const [ value, setValue ] = useState( conditional.value ?? '' );
 
+	/**
+	 * State of the conditional in the UI
+	 */
 	const [ showDetails, setShowDetails ] = useState(
 		conditional.showDetails ?? false
 	);
 
-	// Initialize typeSelection
-	if ( typeof typeSelection === 'undefined' ) {
-		if ( conditionalKey === 'utm_medium' ) {
-			setTypeSelection( 'utm_medium' );
-		} else if ( conditionalKey === 'utm_source' ) {
-			setTypeSelection( 'utm_source' );
-		} else if ( conditionalKey === 'utm_campaign' ) {
-			setTypeSelection( 'utm_campaign' );
-		}
-	}
-
+	/**
+	 * Handles type selection and sets preset values.
+	 *
+	 * @param {string} selected - The selected value used to determine the type and conditional key.
+	 */
 	const onTypeSelection = ( selected ) => {
-		// Handle presets
 		if ( selected === 'utm_medium' ) {
 			setType( 'url_parameter' );
 			setTypeSelection( selected );
@@ -52,18 +93,50 @@ const Conditional = ( {
 			setTypeSelection( selected );
 			setType( selected );
 		}
+
+		// The key is used for multiple different types. It can be confusing if the value is saved when changing types.
+		setConditionalKey( '' );
 	};
 
+	/**
+	 * Handles saving conditionals
+	 */
 	const onSaveConditional = () => {
 		setShowDetails( false );
 		onSaveConditionals( {
 			index,
 			type,
+			typeSelection,
+			nameInStorage,
+			dataType,
 			conditionalKey,
 			operator,
 			value,
 			showDetails: false,
 		} );
+	};
+
+	/**
+	 * Defines when the key field is shown in the UI
+	 *
+	 * @return {boolean} Whether or not to display the "key" field.
+	 */
+	const showKeyField = () => {
+		if (
+			( typeSelection === 'local_storage' && dataType === 'string' ) ||
+			( typeSelection === 'local_storage' &&
+				dataType === 'comma_separated' ) ||
+			( typeSelection === 'session_storage' && dataType === 'string' ) ||
+			( typeSelection === 'session_storage' &&
+				dataType === 'comma_separated' ) ||
+			typeSelection === 'utm_medium' ||
+			typeSelection === 'utm_source' ||
+			typeSelection === 'utm_campaign'
+		) {
+			return false;
+		}
+
+		return true;
 	};
 
 	return (
@@ -87,9 +160,9 @@ const Conditional = ( {
 						></Button>
 					</div>
 					<div className="info">
-						{ type === 'url_parameter' && (
-							<>
-								<p>
+						<>
+							<p>
+								<b>
 									{ typeSelection === 'utm_medium' &&
 										__(
 											'UTM Medium in URL:',
@@ -110,21 +183,43 @@ const Conditional = ( {
 											'URL Parameter:',
 											'planet4-gpch-plugin-optimize'
 										) }
-								</p>
+									{ typeSelection === 'local_storage' &&
+										__(
+											'LocalStorage:',
+											'planet4-gpch-plugin-optimize'
+										) }
+									{ typeSelection === 'session_storage' &&
+										__(
+											'SessionStorage:',
+											'planet4-gpch-plugin-optimize'
+										) }
+								</b>
+							</p>
+							{ ( typeSelection === 'local_storage' ||
+								typeSelection === 'session_storage' ) && (
 								<p>
-									<code>{ conditionalKey }</code>
-									<span>
-										{ operator === 'is' && ' == ' }
-										{ operator === 'is_not' && ' != ' }
-										{ operator === 'contains' &&
-											' contains ' }
-										{ operator === 'does_not_contain' &&
-											' does not contain ' }
-									</span>
-									<code>{ value }</code>
+									{ __(
+										'Name in storage:',
+										'planet4-gpch-plugin-optimize'
+									) }{ ' ' }
+									<code>{ nameInStorage }</code> ({ dataType }
+									)
 								</p>
-							</>
-						) }
+							) }
+							<p>
+								{ conditionalKey !== '' && (
+									<code>{ conditionalKey }</code>
+								) }
+								<span>
+									{ operator === 'is' && ' == ' }
+									{ operator === 'is_not' && ' != ' }
+									{ operator === 'contains' && ' contains ' }
+									{ operator === 'does_not_contain' &&
+										' does not contain ' }
+								</span>
+								<code>{ value }</code>
+							</p>
+						</>
 					</div>
 				</div>
 			) }
@@ -167,24 +262,85 @@ const Conditional = ( {
 								),
 								value: 'utm_campaign',
 							},
+							{
+								label: __(
+									'Data in LocalStorage',
+									'planet4-gpch-plugin-optimize'
+								),
+								value: 'local_storage',
+							},
+							{
+								label: __(
+									'Data in SessionStorage',
+									'planet4-gpch-plugin-optimize'
+								),
+								value: 'session_storage',
+							},
 						] }
 						value={ typeSelection }
 					/>
-					<div className="conditional-details">
-						{ typeSelection !== 'utm_medium' &&
-							typeSelection !== 'utm_source' &&
-							typeSelection !== 'utm_campaign' && (
-								<TextControl
-									__next40pxDefaultSize
-									__nextHasNoMarginBottom
-									label={ __(
-										'Key',
-										'planet4-gpch-plugin-optimize'
-									) }
-									onChange={ setConditionalKey }
-									value={ conditionalKey }
-								/>
+					{ ( typeSelection === 'local_storage' ||
+						typeSelection === 'session_storage' ) && (
+						<TextControl
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
+							label={ __(
+								'Name in Storage',
+								'planet4-gpch-plugin-optimize'
 							) }
+							onChange={ setNameInStorage }
+							value={ nameInStorage }
+						/>
+					) }
+					<div className="conditional-details">
+						{ ( typeSelection === 'local_storage' ||
+							typeSelection === 'session_storage' ) && (
+							<SelectControl
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+								label={ __(
+									'Data type',
+									'planet4-gpch-plugin-optimize'
+								) }
+								onChange={ setDataType }
+								options={ [
+									{
+										label: __(
+											'String',
+											'planet4-gpch-plugin-optimize'
+										),
+										value: 'string',
+									},
+									{
+										label: __(
+											'Comma separated list',
+											'planet4-gpch-plugin-optimize'
+										),
+										value: 'comma_separated',
+									},
+									{
+										label: __(
+											'Object',
+											'planet4-gpch-plugin-optimize'
+										),
+										value: 'object',
+									},
+								] }
+								value={ dataType }
+							/>
+						) }
+						{ showKeyField() && (
+							<TextControl
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+								label={ __(
+									'Key',
+									'planet4-gpch-plugin-optimize'
+								) }
+								onChange={ setConditionalKey }
+								value={ conditionalKey }
+							/>
+						) }
 						<SelectControl
 							__next40pxDefaultSize
 							__nextHasNoMarginBottom
@@ -195,20 +351,28 @@ const Conditional = ( {
 							onChange={ setOperator }
 							value={ operator }
 							options={ [
-								{
-									label: __(
-										'is (==)',
-										'planet4-gpch-plugin-optimize'
-									),
-									value: 'is',
-								},
-								{
-									label: __(
-										'is not (!=)',
-										'planet4-gpch-plugin-optimize'
-									),
-									value: 'is_not',
-								},
+								...( dataType !== 'comma_separated'
+									? [
+											{
+												label: __(
+													'is (==)',
+													'planet4-gpch-plugin-optimize'
+												),
+												value: 'is',
+											},
+									  ]
+									: [] ),
+								...( dataType !== 'comma_separated'
+									? [
+											{
+												label: __(
+													'is not (!=)',
+													'planet4-gpch-plugin-optimize'
+												),
+												value: 'is_not',
+											},
+									  ]
+									: [] ),
 								{
 									label: __(
 										'contains',

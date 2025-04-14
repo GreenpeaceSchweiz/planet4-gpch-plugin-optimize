@@ -1,5 +1,5 @@
 .conditional-container {
-	margin-bottom: .5rem;
+	margin-bottom: 0.5rem;
 	padding: 0.5rem;
 	background-color: #eee;
 
@@ -7,20 +7,25 @@
 		float: right;
 	}
 
+	p {
+		margin: 0;
+	}
+
 	.info {
-		p:first-child {
+
+		p {
 			margin-bottom: 0.5rem;
+		}
+
+		p:last-child {
+			margin-bottom: 0;
 		}
 	}
 
 	.conditional-details {
+
 		.components-button.is-primary {
 			margin-right: 0.5rem;
 		}
 	}
 }
-
-.conditional-container p {
-	margin: 0;
-}
-
