@@ -164,14 +164,12 @@ export default function Edit( { attributes, setAttributes, context } ) {
 				/>
 			</InspectorControls>
 			<div>
-				{ attributes.variantId ===
-					context[
-						'content-optimization/editorSelectedVariantId'
-					] && (
-					<div { ...useBlockProps() }>
-						<InnerBlocks />
-					</div>
-				) }
+				<div { ...useBlockProps() }>
+					{ attributes.variantId ===
+						context[
+							'content-optimization/editorSelectedVariantId'
+						] && <InnerBlocks /> }
+				</div>
 			</div>
 		</>
 	);
