@@ -95,14 +95,13 @@ final class SettingsPage {
 	 * @return void
 	 */
 	public function add_settings_page() {
-		add_menu_page(
-			'Planet4 GPCH Optimize Settings',
-			'Optimize',
+		add_submenu_page(
+			'planet4-gpch-optimize',
+			__( 'Optimize Settings', 'planet4-gpch-plugin-optimize' ),
+			__( 'Settings', 'planet4-gpch-plugin-optimize' ),
 			'manage_options',
 			'planet4-gpch-optimize-settings',
-			array( $this, 'render_settings_page' ),
-			'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iODAwIiBjbGFzcz0iaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCI+CiAgPHBhdGggZmlsbD0iIzEzMTMxMyIgZD0iTTEwMDkgMTAyM0g3MzhWOTVhNTMgNTMgMCAwIDEgNTQtNTRoMTYzYzMwIDAgNTMgMjUgNTMgNTR2OTI4em0tMjI2LTQ1aDE4MlY5NWMwLTUtNS05LTktOUg3OTNjLTMgMC01IDEtNiAzLTIgMS0zIDMtMyA2djg4M3ptLTEzOSA0NkgzNzRWMzE4YzAtMjggMjMtNDkgNTEtNDloMTcxYzI4IDAgNTAgMjIgNTAgNDl2NzA2em0tMjI1LTQ1aDE4MlYzMThjMC0yLTMtNC02LTRINDI0Yy0zIDAtNiAyLTYgNHY2NjF6bS0xMzQgNDRIMTNWNTM0YzAtMjQgMjEtNDQgNDUtNDRoMTgyYzI0IDAgNDUgMjAgNDUgNDR2NDg5ek01OCA5NzhoMTgyVjUzNEg1OHY0NDR6bTMyNC03NDBjLTEyLTMtMjAtMTUtMTctMjdsMjgtMTEyLTExMy0yOGMtMTItMy0xOS0xNS0xNy0yNyAzLTEyIDE2LTE5IDI4LTE2bDE1NSAzOC0zOCAxNTZjLTIgMTItMTQgMTktMjYgMTZ6Ii8+CiAgPHBhdGggZmlsbD0iIzEzMTMxMyIgZD0iTTgzIDMwN2MtNS0yLTEwLTUtMTMtMTEtNy0xMS00LTI0IDctMzBMNDA4IDY1YzExLTcgMjQtNCAzMSA3IDYgMTEgMyAyNC04IDMxTDEwMCAzMDRjLTUgMy0xMSA0LTE3IDN6Ii8+CiAgPHBhdGggZmlsbD0iIzEyMTIxMiIgZD0iTTc3MSA3NmgyMDR2OTIxSDc3MXpNNTQgNTA5aDE5N3Y0OTFINTR6bTM1NS0yMDRoMjE1djY4OEg0MDl6Ii8+Cjwvc3ZnPgo=',
-			80
+			array( $this, 'render_settings_page' )
 		);
 	}
 

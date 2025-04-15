@@ -214,7 +214,7 @@ const gpOptimizeFrontend = () => {
 				break variantLoop;
 			}
 
-			// Conditionals
+			// Conditionals (for forced variants)
 			if ( variant.dataset.conditionals !== undefined ) {
 				const variantConditionals = JSON.parse(
 					variant.dataset.conditionals
