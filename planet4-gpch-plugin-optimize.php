@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'PLANET4_GPCH_PLUGIN_OPTIMIZE_NAME', basename( __DIR__ ) . '/' . basename( __FILE__ ) );
 define( 'PLUGIN_FILE_PATH', __FILE__ );
 
+require_once 'classes/class-optimizationsreport.php';
 require_once 'classes/class-settingspage.php';
 require_once 'classes/class-editorintegration.php';
 
@@ -39,6 +40,7 @@ function planet4_gpch_plugin_optimize_init() {
 		register_block_type( __DIR__ . '/build/blocks/variant' );
 	}
 }
+
 add_action( 'init', 'planet4_gpch_plugin_optimize_init' );
 
 
@@ -120,7 +122,6 @@ function planet4_gpch_plugin_optimize_add_inline_script() {
 add_action( 'wp_enqueue_scripts', 'planet4_gpch_plugin_optimize_add_inline_script', 50 );
 
 
-
 /**
  * Registers meta fields for posts related to the Planet4 GPCH plugin Optimize functionality.
  *
@@ -189,4 +190,5 @@ function planet4_gpch_plugin_optimize_register_meta() {
 		)
 	);
 }
+
 add_action( 'init', 'planet4_gpch_plugin_optimize_register_meta' );
