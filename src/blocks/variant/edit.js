@@ -1,15 +1,22 @@
 import { __ } from '@wordpress/i18n';
-import { percent } from '@wordpress/icons';
+import { percent, external } from '@wordpress/icons';
 import {
 	InnerBlocks,
 	InspectorControls,
 	useBlockProps,
 } from '@wordpress/block-editor';
-import { PanelBody, RangeControl, TextControl } from '@wordpress/components';
+import {
+	PanelBody,
+	RangeControl,
+	TextControl,
+	Button,
+} from '@wordpress/components';
 
 import VariantTargeting from '../../components/VariantTargeting/VariantTargeting';
 
 import './editor.scss';
+
+const { useSelect } = wp.data;
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -54,6 +61,17 @@ export default function Edit( { attributes, setAttributes, context } ) {
 		conditionals = [];
 	}
 
+	const { currentPostLink } = useSelect(
+		( select ) => ( {
+			currentPostLink: select( 'core/editor' ).getCurrentPost().link,
+		} ),
+		[]
+	);
+
+	const previewLink = `${ currentPostLink }${
+		currentPostLink.includes( '?' ) ? '&' : '?'
+	}force_variant=${ encodeURIComponent( variantId ) }`;
+
 	return (
 		<>
 			<InspectorControls>
@@ -83,6 +101,25 @@ export default function Edit( { attributes, setAttributes, context } ) {
 							'planet4-gpch-plugin-optimize'
 						) }
 					/>
+
+					<Button
+						__next40pxDefaultSize
+						icon={ external }
+						variant="link"
+						href={ previewLink }
+						target="optimize-preview"
+						rel="noopener noreferrer"
+						label={ __(
+							'Opens the page for preview with this variant showing.',
+							'planet4-gpch-plugin-optimize'
+						) }
+						showTooltip={ true }
+					>
+						{ __(
+							'Preview Variant',
+							'planet4-gpch-plugin-optimize'
+						) }
+					</Button>
 				</PanelBody>
 				<PanelBody
 					title={ __( 'Targeting', 'planet4-gpch-plugin-optimize' ) }
