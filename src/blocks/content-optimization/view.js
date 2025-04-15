@@ -228,6 +228,7 @@ const gpOptimizeFrontend = () => {
 						winnerVariant = variant;
 					} else {
 						variant.style.display = 'none';
+						variant.remove();
 					}
 				}
 
