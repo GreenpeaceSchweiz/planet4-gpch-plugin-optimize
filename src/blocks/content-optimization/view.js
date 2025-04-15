@@ -203,8 +203,18 @@ const gpOptimizeFrontend = () => {
 		let winningVariantId = null;
 
 		// Check the conditions in variants and if and of them are met, force show that variant.
-		// Forced variants have priority over all other selection mechanisms.
+		// Forced variants have priority over random variant selection.
 		variantLoop: for ( const variant of variants ) {
+			// Force preview when force_variant URL parameter is set to the current variantId
+			const urlParams = new URLSearchParams( window.location.search );
+			const forcePreviewVariant = urlParams.get( 'force_variant' );
+
+			if ( forcePreviewVariant === variant.dataset.variantId ) {
+				winningVariantId = variant.dataset.variantId;
+				break variantLoop;
+			}
+
+			// Conditionals
 			if ( variant.dataset.conditionals !== undefined ) {
 				const variantConditionals = JSON.parse(
 					variant.dataset.conditionals
