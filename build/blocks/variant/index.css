@@ -1,3 +1,3 @@
 
-.conditional-container{background-color:#eee;margin-bottom:.5rem;padding:.5rem;.buttons{float:right}.info{p:first-child{margin-bottom:.5rem}}.conditional-details{.components-button.is-primary{margin-right:.5rem}}}.conditional-container p{margin:0}
-.wp-block-planet4-gpch-plugin-optimize-variant{padding:.5rem}
+.conditional-container{background-color:#eee;margin-bottom:.5rem;padding:.5rem;.buttons{float:right}p{margin:0}.info{p{margin-bottom:.5rem}p:last-child{margin-bottom:0}}.conditional-details{.components-button.is-primary{margin-right:.5rem}}}
+.wp-block-planet4-gpch-plugin-optimize-variant{padding:.5rem}.wp-block-planet4-gpch-plugin-optimize-variant:not(:has(*)){padding:0}
