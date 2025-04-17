@@ -7,3 +7,8 @@
 .wp-block-planet4-gpch-plugin-optimize-variant {
 	padding: 0.5rem;
 }
+
+/* When a different variant is selected in the editor, the block doesn't have any children. Remove padding in that case. */
+.wp-block-planet4-gpch-plugin-optimize-variant:not(:has(*)) {
+	padding: 0;
+}
