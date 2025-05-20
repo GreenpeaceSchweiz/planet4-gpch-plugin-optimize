@@ -20,6 +20,7 @@ Please use the code linters set up in the plugin:
 - CSS/SASS `npm run lint:css`
 
 And format your code using:
+
 - JavaScript: `npm run format`
 - PHP: `npm run format:php`
 

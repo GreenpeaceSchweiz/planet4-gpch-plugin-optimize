@@ -7,20 +7,15 @@ Testing and personalization functionality for WordPress/Planet4 websites that us
 
 ## Functionality
 
-**Implemented functionality:**
-
 - Set up A/B or multivariate content tests directly from the Gutenberg editor
 - Split URL testing directly from the Gutenberg editor
 - Weighted random targeting for content variants (e.g. 70% variant A, 30% variant B)
+- Personalized content bases on:
+    - URL parameters (including UTM tags)
+    - localStorage and sessionStorage
 - Sends experiment data either directly to the Mixpanel JavaScript SDK or to dataLayer (Tag Manager)
 
-**Upcoming functionality:**
-
-- Limit targeting to specific URL parameters (e.g. `utm_source`, `utm_medium`)
-- Limit targeting to specific body classes in the document
-
 Measurement and evaluation of experiments is not part of this plugin.
-
 
 It only works in conjunction with the [Mixpanel experiments](https://docs.mixpanel.com/docs/reports/apps/experiments) feature. Conversion events also need to be set up separately for Mixpanel.
 
@@ -29,6 +24,7 @@ It only works in conjunction with the [Mixpanel experiments](https://docs.mixpan
 - [Setup](documentation/setup.md)
 - [Setting up an in-page experiment](documentation/setting-up-an-experiment.md)
 - [Using split URL tests](documentation/using-split-url-tests.md)
+- [Personalize content](./documentation/personalization.md)
 - [Evaluating experiments in Mixpanel](documentation/evaluating-experiments-in-mixpanel.md)
 - [Development](documentation/development.md)
 
