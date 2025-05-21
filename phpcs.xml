@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<ruleset name="GpchOptimizeRuleset">
+	<rule ref="WordPress"/>
+
+	<!-- Excludes-->
+	<rule ref="Squiz.Commenting.InlineComment">
+		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
+	</rule>
+	<rule ref="WordPress.PHP">
+		<exclude name="WordPress.PHP.YodaConditions.NotYoda"/>
+	</rule>
+</ruleset>
