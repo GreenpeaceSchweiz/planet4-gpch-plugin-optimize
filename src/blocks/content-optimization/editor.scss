@@ -22,6 +22,7 @@
 
 	.variant-selector-container {
 		padding: 0.5rem;
+		padding-bottom: 2rem;
 		border-bottom: 1px dashed rgb(17, 17, 17);
 		background-color: #f3f3f3;
 
@@ -64,5 +65,12 @@
 		}
 	}
 
+	/* Make sure the buttons don't overlap when the child block is selected */
+	&:has(.wp-block.is-selected.wp-block-planet4-gpch-plugin-optimize-variant) {
+
+		.variant-selector-container {
+			padding-bottom: 60px;
+		}
+	}
 
 }
