@@ -25,7 +25,8 @@
 			"type": "string"
 		},
 		"targetPercentage": {
-			"type": "number"
+			"type": "number",
+			"default": 50
 		},
 		"conditionals": {
 			"type": "array"
