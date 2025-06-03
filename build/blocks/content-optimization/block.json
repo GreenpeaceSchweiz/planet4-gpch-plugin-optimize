@@ -19,7 +19,8 @@
   "example": {},
   "attributes": {
     "status": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": true
     },
     "optimizationId": {
       "type": "string"
