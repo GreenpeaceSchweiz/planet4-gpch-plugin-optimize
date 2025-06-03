@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Planet4 GPCH Optimize
  * Description:       A/B Testing and Personalization for Planet4 and Mixpanel
- * Version:           0.4.0
+ * Version:           0.4.1
  * Requires at least: 6.7
  * Requires PHP:      7.4
  * Author:            Stefan Dürrenberger/Greenpeace Switzerland

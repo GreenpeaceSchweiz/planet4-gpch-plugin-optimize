@@ -3,7 +3,7 @@
 	"apiVersion": 3,
 	"name": "planet4-gpch-plugin-optimize/content-optimization",
 	"allowedBlocks": [ "planet4-gpch-plugin-optimize/variant" ],
-	"version": "0.1.0",
+	"version": "0.4.1",
 	"title": "Content Optimization",
 	"category": "widgets",
 	"description": "Container block for optimization variants.",
