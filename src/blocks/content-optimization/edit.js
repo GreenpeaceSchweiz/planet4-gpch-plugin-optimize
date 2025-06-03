@@ -8,7 +8,7 @@ import {
 
 import { useSelect } from '@wordpress/data';
 
-import { plusCircleFilled } from '@wordpress/icons';
+import { Icon, plusCircleFilled, pinSmall } from '@wordpress/icons';
 
 import {
 	PanelBody,
@@ -176,7 +176,24 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 										handleVariantSelection( index )
 									}
 								>
-									{ block.attributes.variantName }
+									{ block.attributes.variantName } (
+									{ block.attributes.targetPercentage ===
+										'' && '50' }
+									{ block.attributes.targetPercentage !==
+										'' &&
+										block.attributes.targetPercentage }
+									%
+									{ typeof block.attributes.conditionals !==
+										'undefined' &&
+										block.attributes.conditionals.length !==
+											0 && (
+											<Icon
+												icon={ pinSmall }
+												className="pin-icon"
+												size={ 24 }
+											/>
+										) }
+									)
 								</Button>
 							) )
 						) : (

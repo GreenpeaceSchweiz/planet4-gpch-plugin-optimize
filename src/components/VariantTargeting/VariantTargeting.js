@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { PanelBody, Button } from '@wordpress/components';
-import { plus } from '@wordpress/icons';
+import { pin, plus } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
 
 import './VariantTargeting.css';
@@ -32,11 +32,18 @@ const VariantTargeting = ( { conditionals, setAttributes } ) => {
 
 	return (
 		<>
-			<PanelBody>
+			<PanelBody
+				title={ __(
+					'Override Variant Targeting',
+					'planet4-gpch-plugin-optimize'
+				) }
+				icon={ pin }
+				initialOpen={ true }
+			>
 				<p>
 					<b>
 						{ __(
-							'Force this variant when either',
+							'Force this variant when either:',
 							'planet4-gpch-plugin-optimize'
 						) }
 					</b>
