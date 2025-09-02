@@ -82,6 +82,16 @@ const gpOptimizeFrontend = () => {
 				return true;
 			}
 		}
+		else if (operator === 'exists') {
+			if ( paramValue !== null ) {
+				return true;
+			}
+		}
+		else if (operator === 'does_not_exist') {
+			if ( paramValue === null ) {
+				return true;
+			}
+		}
 
 		return false;
 	};
@@ -123,7 +133,38 @@ const gpOptimizeFrontend = () => {
 				storageType === 'local_storage' ? localStorage : sessionStorage;
 			const storedValue = storage.getItem( nameInStorage );
 
-			// Ensure the stored value exists
+			// Evaluate exists and does_not_exist operators
+			if (dataType !== 'object') {
+				if (operator === 'exists') {
+					return storedValue !== null;
+				}
+				else if (operator === 'does_not_exist') {
+					return storedValue === null;
+				}
+			}
+			else if (dataType === 'object') {
+				if (operator === 'exists') {
+					try {
+						const parsedValue = JSON.parse(storedValue);
+
+						return typeof parsedValue === 'object' && parsedValue !== null && conditionalKey in parsedValue;
+					} catch (error) {
+						return false;
+					}
+				}
+				else if (operator === 'does_not_exist') {
+					try {
+						const parsedValue = JSON.parse(storedValue);
+
+						return typeof parsedValue !== 'object' || parsedValue === null || !( conditionalKey in parsedValue );
+					} catch (error) {
+						return true;
+					}
+				}
+			}
+
+
+			// For all other operators, if there's no value, the result is false
 			if ( storedValue === null ) {
 				return false;
 			}
