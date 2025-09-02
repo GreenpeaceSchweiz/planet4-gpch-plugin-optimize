@@ -93,9 +93,6 @@ const Conditional = ( {
 			setTypeSelection( selected );
 			setType( selected );
 		}
-
-		// The key is used for multiple different types. It can be confusing if the value is saved when changing types.
-		setConditionalKey( '' );
 	};
 
 	/**
