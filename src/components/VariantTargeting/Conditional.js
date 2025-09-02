@@ -204,19 +204,24 @@ const Conditional = ( {
 								</p>
 							) }
 							<p>
-								{ conditionalKey !== '' && operator !== 'exists' && operator !== 'does_not_exist' && (
-									<code>{ conditionalKey }</code>
-								) }
+								{ conditionalKey !== '' &&
+									operator !== 'exists' &&
+									operator !== 'does_not_exist' && (
+										<code>{ conditionalKey }</code>
+									) }
 								<span>
 									{ operator === 'is' && ' == ' }
 									{ operator === 'is_not' && ' != ' }
 									{ operator === 'contains' && ' contains ' }
-									{ operator === 'does_not_contain' && ' does not contain ' }
+									{ operator === 'does_not_contain' &&
+										' does not contain ' }
 									{ operator === 'exists' && ' exists ' }
-									{ operator === 'does_not_exist' && ' does not exist' }
+									{ operator === 'does_not_exist' &&
+										' does not exist' }
 								</span>
-								{ operator !== 'exists' && operator !== 'does_not_exist' && (
-									<code>{ value }</code>
+								{ operator !== 'exists' &&
+									operator !== 'does_not_exist' && (
+										<code>{ value }</code>
 									) }
 							</p>
 						</>
@@ -403,17 +408,18 @@ const Conditional = ( {
 								},
 							] }
 						/>
-						{ operator !== 'exists' && operator !== 'does_not_exist' && (
-							<TextControl
-								__next40pxDefaultSize
-								__nextHasNoMarginBottom
-								label={ __(
-									'Value',
-									'planet4-gpch-plugin-optimize'
-								) }
-								onChange={ setValue }
-								value={ value }
-							/>
+						{ operator !== 'exists' &&
+							operator !== 'does_not_exist' && (
+								<TextControl
+									__next40pxDefaultSize
+									__nextHasNoMarginBottom
+									label={ __(
+										'Value',
+										'planet4-gpch-plugin-optimize'
+									) }
+									onChange={ setValue }
+									value={ value }
+								/>
 							) }
 						<Button
 							onClick={ () => onSaveConditional() }
