@@ -1,6 +1,6 @@
 {
 	"name": "planet4-gpch-plugin-optimize",
-	"version": "0.4.2",
+	"version": "0.5.0",
 	"description": "A/B Testing and Personalization for Planet4 and Mixpanel",
 	"author": "Stefan Dürrenberger/Greenpeace Schweiz",
 	"license": "GPL-2.0-or-later",
