@@ -1,4 +1,5 @@
-/* global localStorage, sessionStorage, MutationObserver, Planet4GpchPluginOptimizeSettings */
+/* global MutationObserver, Planet4GpchPluginOptimizeSettings */
+/* eslint-disable no-console */
 
 /**
  * The main function handling frontend optimizations.
@@ -148,7 +149,7 @@ const gpOptimizeFrontend = () => {
 							parsedValue !== null &&
 							conditionalKey in parsedValue
 						);
-					} catch ( error ) {
+					} catch {
 						return false;
 					}
 				} else if ( operator === 'does_not_exist' ) {
@@ -160,7 +161,7 @@ const gpOptimizeFrontend = () => {
 							parsedValue === null ||
 							! ( conditionalKey in parsedValue )
 						);
-					} catch ( error ) {
+					} catch {
 						return true;
 					}
 				}
@@ -225,7 +226,7 @@ const gpOptimizeFrontend = () => {
 					) {
 						return ! storedObjectValue.includes( value );
 					}
-				} catch ( error ) {
+				} catch {
 					// If JSON parsing fails, return false
 					return false;
 				}
@@ -404,6 +405,8 @@ const gpOptimizeFrontend = () => {
 				const optimizationName =
 					optimizeBlock.dataset.optimizationName ||
 					optimizeBlock.dataset.optimizationId;
+				const optimizationPurpose =
+					optimizeBlock.dataset.optimizationPurpose || 'experiment';
 
 				if (
 					typeof Planet4GpchPluginOptimizeSettings !== 'undefined'
@@ -412,7 +415,10 @@ const gpOptimizeFrontend = () => {
 						Planet4GpchPluginOptimizeSettings.event_type ===
 						'mixpanel'
 					) {
-						if ( typeof window.mixpanel !== 'undefined' ) {
+						if (
+							optimizationPurpose === 'experiment' &&
+							typeof window.mixpanel !== 'undefined'
+						) {
 							console.log( 'Sending event to Mixpanel' );
 							window.mixpanel.track( '$experiment_started', {
 								'Experiment name': optimizationName,
@@ -421,8 +427,9 @@ const gpOptimizeFrontend = () => {
 							} );
 						}
 					} else if (
+						optimizationPurpose === 'experiment' &&
 						Planet4GpchPluginOptimizeSettings.event_type ===
-						'datalayer'
+							'datalayer'
 					) {
 						window.dataLayer = window.dataLayer || [];
 						console.log( 'Sending event to DataLayer' );

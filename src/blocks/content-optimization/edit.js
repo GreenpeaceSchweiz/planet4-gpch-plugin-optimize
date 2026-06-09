@@ -6,16 +6,20 @@ import {
 	useBlockProps,
 } from '@wordpress/block-editor';
 
-import { useSelect } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 
 import { Icon, plusCircleFilled, pinSmall } from '@wordpress/icons';
 
 import {
 	PanelBody,
+	Modal,
 	TextControl,
 	ToggleControl,
+	SelectControl,
 	Button,
 } from '@wordpress/components';
+
+import { useState } from '@wordpress/element';
 
 import variantIcon from '../../icons/variant.js';
 import './editor.scss';
@@ -24,6 +28,22 @@ const INNER_BLOCK_TEMPLATE = [
 	[ 'planet4-gpch-plugin-optimize/variant', { variantName: 'Variant A' } ],
 	[ 'planet4-gpch-plugin-optimize/variant', { variantName: 'Variant B' } ],
 ];
+
+const OPTIMIZATION_PURPOSES = {
+	EXPERIMENT: 'experiment',
+	PERSONALIZATION: 'personalization',
+};
+
+const PURPOSE_LABELS = {
+	[ OPTIMIZATION_PURPOSES.EXPERIMENT ]: __(
+		'🧪 Experiment',
+		'planet4-gpch-plugin-optimize'
+	),
+	[ OPTIMIZATION_PURPOSES.PERSONALIZATION ]: __(
+		'👥 Personalization',
+		'planet4-gpch-plugin-optimize'
+	),
+};
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -36,12 +56,19 @@ const INNER_BLOCK_TEMPLATE = [
  * @param {Object}   root0.attributes
  * @param {Function} root0.setAttributes
  *
- * @return {JSX.Element} Element to render.
+ * @return {Element} Element to render.
  */
 export default function Edit( { clientId, attributes, setAttributes } ) {
 	const { status } = attributes;
 	let { optimizationId, optimizationName, editorSelectedVariantIndex } =
 		attributes;
+	const { createErrorNotice } = useDispatch( 'core/notices' );
+	const optimizationPurpose =
+		attributes.optimizationPurpose || OPTIMIZATION_PURPOSES.EXPERIMENT;
+	const [ isPurposeModalOpen, setIsPurposeModalOpen ] = useState(
+		() => optimizationId === undefined
+	);
+	const isNewBlock = optimizationId === undefined;
 
 	const innerBlocks = useSelect(
 		( select ) => {
@@ -66,28 +93,90 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		}
 	};
 
-	if ( optimizationId === undefined ) {
-		// Generate a random optimizationId
-		const chars =
-			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-		const length = 16;
-		optimizationId = '';
-
-		for ( let i = 0; i < length; i++ ) {
-			optimizationId += chars.charAt(
-				Math.floor( Math.random() * chars.length )
-			);
-		}
-
-		setAttributes( { optimizationId } );
-	}
-
 	if ( optimizationName === undefined ) {
 		optimizationName = optimizationId;
 	}
 
+	const generateOptimizationId = () => {
+		const chars =
+			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		const length = 16;
+		let generatedOptimizationId = '';
+
+		for ( let index = 0; index < length; index++ ) {
+			generatedOptimizationId += chars.charAt(
+				Math.floor( Math.random() * chars.length )
+			);
+		}
+
+		return generatedOptimizationId;
+	};
+
+	const handlePurposeSelection = ( purpose ) => {
+		setAttributes( {
+			optimizationPurpose: purpose,
+			optimizationId:
+				attributes.optimizationId || generateOptimizationId(),
+		} );
+		setIsPurposeModalOpen( false );
+	};
+
+	const handlePurposeChange = ( purpose ) => {
+		setAttributes( { optimizationPurpose: purpose } );
+	};
+
 	return (
 		<>
+			{ isPurposeModalOpen && (
+				<Modal
+					title={ __(
+						'What are you creating?',
+						'planet4-gpch-plugin-optimize'
+					) }
+					size="medium"
+					onRequestClose={ () => {
+						setIsPurposeModalOpen( false );
+					} }
+					className="content-optimization-purpose-modal"
+				>
+					<p>
+						{ __(
+							'Choose Experiment if you want Mixpanel experiment tracking. Choose Personalization if you only want to show tailored content and skip experiment tracking. You can change this later in the block settings.',
+							'planet4-gpch-plugin-optimize'
+						) }
+					</p>
+					<div className="content-optimization-purpose-modal__actions">
+						<Button
+							variant="primary"
+							onClick={ () =>
+								handlePurposeSelection(
+									OPTIMIZATION_PURPOSES.EXPERIMENT
+								)
+							}
+						>
+							{
+								PURPOSE_LABELS[
+									OPTIMIZATION_PURPOSES.EXPERIMENT
+								]
+							}
+						</Button>{ ' ' }
+						<Button
+							variant="secondary"
+							onClick={ () =>
+								handlePurposeSelection(
+									OPTIMIZATION_PURPOSES.PERSONALIZATION
+								)
+							}
+						>
+							{
+								PURPOSE_LABELS[
+									OPTIMIZATION_PURPOSES.PERSONALIZATION
+								]
+							}
+						</Button>
+					</div>
+				</Modal>
+			) }
 			<InspectorControls>
 				<PanelBody
 					title={ __( 'Settings', 'planet4-gpch-plugin-optimize' ) }
@@ -108,6 +197,34 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 							'planet4-gpch-plugin-optimize'
 						) }
 					/>
+					<SelectControl
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __(
+							'Optimization mode',
+							'planet4-gpch-plugin-optimize'
+						) }
+						value={ optimizationPurpose }
+						onChange={ handlePurposeChange }
+						options={ [
+							{
+								label: PURPOSE_LABELS[
+									OPTIMIZATION_PURPOSES.EXPERIMENT
+								],
+								value: OPTIMIZATION_PURPOSES.EXPERIMENT,
+							},
+							{
+								label: PURPOSE_LABELS[
+									OPTIMIZATION_PURPOSES.PERSONALIZATION
+								],
+								value: OPTIMIZATION_PURPOSES.PERSONALIZATION,
+							},
+						] }
+						help={ __(
+							'Experiment mode sends events to web analytics tools like Mixpanel. Personalization mode does NOT send experiment events and is only used to show tailored content.',
+							'planet4-gpch-plugin-optimize'
+						) }
+					/>
 					<p>
 						<b>Optimization ID: </b>
 						{ optimizationId || '' }
@@ -124,11 +241,12 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 							if ( /^[A-Za-z0-9 -]*$/.test( value ) ) {
 								setAttributes( { optimizationName: value } );
 							} else {
-								alert(
+								createErrorNotice(
 									__(
 										'Please use only letters, numbers, spaces and dashes.',
 										'planet4-gpch-plugin-optimize'
-									)
+									),
+									{ type: 'snackbar' }
 								);
 							}
 						} }
@@ -143,20 +261,19 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 				<div className="variant-selector-container">
 					<p className={ 'optimization-info' }>
 						<strong>
-							{ __(
-								'Content Optimization:',
-								'planet4-gpch-plugin-optimize'
-							) }{ ' ' }
+							{ PURPOSE_LABELS[ optimizationPurpose ] }:{ ' ' }
 							{ optimizationName }
 						</strong>
-						{ optimizationName === optimizationId && (
-							<span>
-								{ __(
-									'(Feel free to set a human redable name!)',
-									'planet4-gpch-plugin-optimize'
-								) }
-							</span>
-						) }
+						{ optimizationName === optimizationId &&
+							! isNewBlock && (
+								<span>
+									{ ' ' }
+									{ __(
+										'(Feel free to set a human redable name!)',
+										'planet4-gpch-plugin-optimize'
+									) }
+								</span>
+							) }
 					</p>
 					<div className="variant-buttons">
 						{ innerBlocks.length > 0 ? (

@@ -5,19 +5,32 @@
 
 Testing and personalization functionality for WordPress/Planet4 websites that use Mixpanel for web analytics.
 
+Content optimizations can now be used in two modes:
+
+- `Experiment`: tracked optimization that sends experiment events to the configured analytics destination.
+- `Personalization`: tailored content that does not send experiment events.
+
 ## Functionality
 
-- Set up A/B or multivariate content tests directly from the Gutenberg editor
+- Set up in-page content optimizations directly from the Gutenberg editor in either `Experiment` or `Personalization` mode
 - Split URL testing directly from the Gutenberg editor
 - Weighted random targeting for content variants (e.g. 70% variant A, 30% variant B)
 - Personalized content bases on:
     - URL parameters (including UTM tags)
     - localStorage and sessionStorage
-- Sends experiment data either directly to the Mixpanel JavaScript SDK or to dataLayer (Tag Manager)
+- Sends experiment data either directly to the Mixpanel JavaScript SDK or to dataLayer (Tag Manager) when a content optimization is in `Experiment` mode
+
+## In-Page Optimization Modes
+
+When editors insert a content optimization block, they are asked whether they are creating an `Experiment` or `Personalization`. The selected mode can also be changed later in the block settings.
+
+- `Experiment` mode is intended for A/B tests and multivariate tests. It sends experiment events to the configured analytics destination.
+- `Personalization` mode is intended for showing targeted content without experiment tracking.
+- Existing content optimization blocks default to `Experiment` mode so existing experiments keep their previous behavior.
 
 Measurement and evaluation of experiments is not part of this plugin.
 
-It only works in conjunction with the [Mixpanel experiments](https://docs.mixpanel.com/docs/reports/apps/experiments) feature. Conversion events also need to be set up separately for Mixpanel.
+`Experiment` mode can be used in conjunction with the [Mixpanel experiments](https://docs.mixpanel.com/docs/reports/apps/experiments) feature. Conversion events also need to be set up separately for Mixpanel.
 
 ## Documentation
 
