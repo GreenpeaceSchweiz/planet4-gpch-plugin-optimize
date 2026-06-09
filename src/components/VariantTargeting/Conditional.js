@@ -13,7 +13,7 @@ import './Conditional.css';
  * @param {Object}   props.conditional         The object representing the conditional state, including keys like `conditionalKey`, `operator`, and `value`.
  * @param {Function} props.onSaveConditionals  A callback function triggered when the conditional is saved.
  * @param {Function} props.onRemoveConditional A callback function triggered when the conditional is removed.
- * @return {JSX.Element}                       A React component that renders the conditional UI with editable fields for type, key, operator, and value.
+ * @return {Element}                           A React component that renders the conditional UI with editable fields for type, key, operator, and value.
  */
 const Conditional = ( {
 	index,

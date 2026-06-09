@@ -6,7 +6,7 @@ import {
 	useBlockProps,
 } from '@wordpress/block-editor';
 
-import { useSelect } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 
 import { Icon, plusCircleFilled, pinSmall } from '@wordpress/icons';
 
@@ -56,16 +56,17 @@ const PURPOSE_LABELS = {
  * @param {Object}   root0.attributes
  * @param {Function} root0.setAttributes
  *
- * @return {JSX.Element} Element to render.
+ * @return {Element} Element to render.
  */
 export default function Edit( { clientId, attributes, setAttributes } ) {
 	const { status } = attributes;
 	let { optimizationId, optimizationName, editorSelectedVariantIndex } =
 		attributes;
+	const { createErrorNotice } = useDispatch( 'core/notices' );
 	const optimizationPurpose =
 		attributes.optimizationPurpose || OPTIMIZATION_PURPOSES.EXPERIMENT;
-	const [ isPurposeModalOpen, setIsPurposeModalOpen ] = useState( () =>
-		optimizationId === undefined
+	const [ isPurposeModalOpen, setIsPurposeModalOpen ] = useState(
+		() => optimizationId === undefined
 	);
 	const isNewBlock = optimizationId === undefined;
 
@@ -153,7 +154,11 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 								)
 							}
 						>
-							{ PURPOSE_LABELS[ OPTIMIZATION_PURPOSES.EXPERIMENT ] }
+							{
+								PURPOSE_LABELS[
+									OPTIMIZATION_PURPOSES.EXPERIMENT
+								]
+							}
 						</Button>{ ' ' }
 						<Button
 							variant="secondary"
@@ -163,7 +168,11 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 								)
 							}
 						>
-							{ PURPOSE_LABELS[ OPTIMIZATION_PURPOSES.PERSONALIZATION ] }
+							{
+								PURPOSE_LABELS[
+									OPTIMIZATION_PURPOSES.PERSONALIZATION
+								]
+							}
 						</Button>
 					</div>
 				</Modal>
@@ -189,32 +198,33 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						) }
 					/>
 					<SelectControl
-							__next40pxDefaultSize
-							__nextHasNoMarginBottom
-							label={ __(
-								'Optimization mode',
-								'planet4-gpch-plugin-optimize'
-							) }
-							value={ optimizationPurpose }
-							onChange={ handlePurposeChange }
-							options={ [
-								{
-									label: PURPOSE_LABELS[ OPTIMIZATION_PURPOSES.EXPERIMENT ],
-									value: OPTIMIZATION_PURPOSES.EXPERIMENT,
-								},
-								{
-									label:
-										PURPOSE_LABELS[
-											OPTIMIZATION_PURPOSES.PERSONALIZATION
-										],
-									value: OPTIMIZATION_PURPOSES.PERSONALIZATION,
-								},
-							] }
-							help={ __(
-								'Experiment mode sends events to web analytics tools like Mixpanel. Personalization mode does NOT send experiment events and is only used to show tailored content.',
-								'planet4-gpch-plugin-optimize'
-							) }
-						/>
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+						label={ __(
+							'Optimization mode',
+							'planet4-gpch-plugin-optimize'
+						) }
+						value={ optimizationPurpose }
+						onChange={ handlePurposeChange }
+						options={ [
+							{
+								label: PURPOSE_LABELS[
+									OPTIMIZATION_PURPOSES.EXPERIMENT
+								],
+								value: OPTIMIZATION_PURPOSES.EXPERIMENT,
+							},
+							{
+								label: PURPOSE_LABELS[
+									OPTIMIZATION_PURPOSES.PERSONALIZATION
+								],
+								value: OPTIMIZATION_PURPOSES.PERSONALIZATION,
+							},
+						] }
+						help={ __(
+							'Experiment mode sends events to web analytics tools like Mixpanel. Personalization mode does NOT send experiment events and is only used to show tailored content.',
+							'planet4-gpch-plugin-optimize'
+						) }
+					/>
 					<p>
 						<b>Optimization ID: </b>
 						{ optimizationId || '' }
@@ -231,11 +241,12 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 							if ( /^[A-Za-z0-9 -]*$/.test( value ) ) {
 								setAttributes( { optimizationName: value } );
 							} else {
-								alert(
+								createErrorNotice(
 									__(
 										'Please use only letters, numbers, spaces and dashes.',
 										'planet4-gpch-plugin-optimize'
-									)
+									),
+									{ type: 'snackbar' }
 								);
 							}
 						} }
@@ -249,19 +260,20 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 			<div { ...useBlockProps() }>
 				<div className="variant-selector-container">
 					<p className={ 'optimization-info' }>
-						<strong>{ PURPOSE_LABELS[ optimizationPurpose ] }:
-							{ ' ' }
+						<strong>
+							{ PURPOSE_LABELS[ optimizationPurpose ] }:{ ' ' }
 							{ optimizationName }
 						</strong>
-						{ optimizationName === optimizationId && ! isNewBlock && (
-							<span>
-								{ ' ' }
-								{ __(
-									'(Feel free to set a human redable name!)',
-									'planet4-gpch-plugin-optimize'
-								) }
-							</span>
-						) }
+						{ optimizationName === optimizationId &&
+							! isNewBlock && (
+								<span>
+									{ ' ' }
+									{ __(
+										'(Feel free to set a human redable name!)',
+										'planet4-gpch-plugin-optimize'
+									) }
+								</span>
+							) }
 					</p>
 					<div className="variant-buttons">
 						{ innerBlocks.length > 0 ? (

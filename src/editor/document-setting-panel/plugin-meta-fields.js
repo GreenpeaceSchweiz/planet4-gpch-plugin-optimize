@@ -23,6 +23,7 @@ const PluginMetaFields = () => {
 	const updateMetaField = ( metaName, value ) => {
 		editPost( { meta: { [ metaName ]: value } } );
 	};
+	const { createErrorNotice } = useDispatch( 'core/notices' );
 
 	return (
 		<>
@@ -58,11 +59,12 @@ const PluginMetaFields = () => {
 							value
 						);
 					} else {
-						alert(
+						createErrorNotice(
 							__(
 								'Please use only letters, numbers, spaces and dashes.',
 								'planet4-gpch-plugin-optimize'
-							)
+							),
+							{ type: 'snackbar' }
 						);
 					}
 				} }
@@ -77,7 +79,20 @@ const PluginMetaFields = () => {
 				label={ __( 'Variant Name', 'planet4-gpch-plugin-optimize' ) }
 				value={ variantName || '' }
 				onChange={ ( value ) => {
-					updateMetaField( '_planet4_optimize_variant_name', value );
+					if ( /^[A-Za-z0-9 -]*$/.test( value ) ) {
+						updateMetaField(
+							'_planet4_optimize_variant_name',
+							value
+						);
+					} else {
+						createErrorNotice(
+							__(
+								'Please use only letters, numbers, spaces and dashes.',
+								'planet4-gpch-plugin-optimize'
+							),
+							{ type: 'snackbar' }
+						);
+					}
 				} }
 				help={ __(
 					"Used to identify the Variant in Mixpanel. Feel free to use a readable name. Don't change once the experiment has started!",
