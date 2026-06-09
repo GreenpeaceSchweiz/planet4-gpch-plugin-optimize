@@ -404,6 +404,8 @@ const gpOptimizeFrontend = () => {
 				const optimizationName =
 					optimizeBlock.dataset.optimizationName ||
 					optimizeBlock.dataset.optimizationId;
+				const optimizationPurpose =
+					optimizeBlock.dataset.optimizationPurpose || 'experiment';
 
 				if (
 					typeof Planet4GpchPluginOptimizeSettings !== 'undefined'
@@ -412,7 +414,10 @@ const gpOptimizeFrontend = () => {
 						Planet4GpchPluginOptimizeSettings.event_type ===
 						'mixpanel'
 					) {
-						if ( typeof window.mixpanel !== 'undefined' ) {
+						if (
+							optimizationPurpose === 'experiment' &&
+							typeof window.mixpanel !== 'undefined'
+						) {
 							console.log( 'Sending event to Mixpanel' );
 							window.mixpanel.track( '$experiment_started', {
 								'Experiment name': optimizationName,
@@ -421,8 +426,8 @@ const gpOptimizeFrontend = () => {
 							} );
 						}
 					} else if (
-						Planet4GpchPluginOptimizeSettings.event_type ===
-						'datalayer'
+						optimizationPurpose === 'experiment' &&
+						Planet4GpchPluginOptimizeSettings.event_type === 'datalayer'
 					) {
 						window.dataLayer = window.dataLayer || [];
 						console.log( 'Sending event to DataLayer' );
