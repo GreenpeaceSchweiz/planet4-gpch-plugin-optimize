@@ -20,10 +20,10 @@
 		"env": "wp-env"
 	},
 	"devDependencies": {
-		"@wordpress/env": "^10.17.0",
-		"@wordpress/scripts": "^30.10.0"
+		"@wordpress/env": "^11.8.0",
+		"@wordpress/scripts": "^32.4.0"
 	},
 	"dependencies": {
-		"@wordpress/icons": "^10.17.0"
+		"@wordpress/icons": "^13.3.0"
 	}
 }
