@@ -1,5 +1,5 @@
-import { registerPlugin } from '@wordpress/plugins';
-import { PluginDocumentSettingPanel } from '@wordpress/editor';
+const { registerPlugin } = wp.plugins;
+const { PluginDocumentSettingPanel } = wp.editor;
 
 import PluginMetaFields from './plugin-meta-fields';
 

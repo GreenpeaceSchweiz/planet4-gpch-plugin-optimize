@@ -25,6 +25,7 @@ export default function save( { attributes } ) {
 			data-status={ attributes.status }
 			data-optimization-id={ attributes.optimizationId }
 			data-optimization-name={ attributes.optimizationName }
+			data-optimization-purpose={ attributes.optimizationPurpose }
 		>
 			<InnerBlocks.Content />
 		</div>

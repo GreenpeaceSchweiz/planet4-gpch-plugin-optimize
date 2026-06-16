@@ -12,6 +12,8 @@ import {
 	Button,
 } from '@wordpress/components';
 
+import { useEffect, useState } from '@wordpress/element';
+
 import VariantTargeting from '../../components/VariantTargeting/VariantTargeting';
 
 import './editor.scss';
@@ -32,25 +34,30 @@ const { useSelect } = wp.data;
  */
 export default function Edit( { attributes, setAttributes, context } ) {
 	let { variantId, variantName, targetPercentage, conditionals } = attributes;
-
-	if ( variantId === undefined ) {
-		// Generate a random optimizationId
+	const [ generatedVariantId ] = useState( () => {
 		const chars =
 			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 		const length = 8;
-		variantId = '';
+		let nextVariantId = '';
 
-		for ( let i = 0; i < length; i++ ) {
-			variantId += chars.charAt(
+		for ( let index = 0; index < length; index++ ) {
+			nextVariantId += chars.charAt(
 				Math.floor( Math.random() * chars.length )
 			);
 		}
 
-		setAttributes( { variantId } );
-	}
+		return nextVariantId;
+	} );
+	const activeVariantId = variantId || generatedVariantId;
+
+	useEffect( () => {
+		if ( variantId === undefined ) {
+			setAttributes( { variantId: generatedVariantId } );
+		}
+	}, [ variantId, generatedVariantId, setAttributes ] );
 
 	if ( variantName === undefined ) {
-		variantName = variantId;
+		variantName = activeVariantId;
 	}
 
 	if ( targetPercentage === undefined ) {
@@ -70,7 +77,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 
 	const previewLink = `${ currentPostLink }${
 		currentPostLink.includes( '?' ) ? '&' : '?'
-	}force_variant=${ encodeURIComponent( variantId ) }`;
+	}force_variant=${ encodeURIComponent( activeVariantId ) }`;
 
 	return (
 		<>
@@ -127,7 +134,10 @@ export default function Edit( { attributes, setAttributes, context } ) {
 					<RangeControl
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
-						label="Target group percentage"
+						label={ __(
+							'Target group percentage',
+							'planet4-gpch-plugin-optimize'
+						) }
 						afterIcon={ percent }
 						value={ targetPercentage }
 						onChange={ ( value ) =>
@@ -165,7 +175,7 @@ export default function Edit( { attributes, setAttributes, context } ) {
 			</InspectorControls>
 			<div>
 				<div { ...useBlockProps() }>
-					{ attributes.variantId ===
+					{ activeVariantId ===
 						context[
 							'content-optimization/editorSelectedVariantId'
 						] && <InnerBlocks /> }

@@ -1,4 +1,5 @@
 /* global Planet4GpchPluginOptimizeSplitURLSettings */
+/* eslint-disable no-console */
 const SplitUrlTest = () => {
 	if (
 		typeof Planet4GpchPluginOptimizeSplitURLSettings !== 'undefined' &&
