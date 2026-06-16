@@ -1,7 +1,7 @@
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Button, SelectControl, TextControl } from '@wordpress/components';
-import { edit, closeSmall } from '@wordpress/icons';
+import { pencil, closeSmall } from '@wordpress/icons';
 
 import './Conditional.css';
 
@@ -144,7 +144,7 @@ const Conditional = ( {
 						<Button
 							onClick={ () => setShowDetails( true ) }
 							variant="link"
-							icon={ edit }
+							icon={ pencil }
 							size="small"
 							iconSize={ 20 }
 						></Button>
