@@ -141,7 +141,9 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 				>
 					<p>
 						{ __(
-							'Choose Experiment if you want Mixpanel experiment tracking. Choose Personalization if you only want to show tailored content and skip experiment tracking. You can change this later in the block settings.',
+							'Choose Experiment if you want Mixpanel experiment tracking. ' +
+								'Choose Personalization if you only want to show tailored content and skip experiment tracking. ' +
+								'You can change this later in the block settings.',
 							'planet4-gpch-plugin-optimize'
 						) }
 					</p>
@@ -187,11 +189,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 							'Enable/Disable the Optimization',
 							'planet4-gpch-plugin-optimize'
 						) }
-						onChange={ () =>
-							setAttributes( {
-								status: ! status,
-							} )
-						}
+						onChange={ () => setAttributes( { status: ! status } ) }
 						help={ __(
 							'Disabling the Optimization will show the first variant to everyone.',
 							'planet4-gpch-plugin-optimize'
@@ -221,7 +219,8 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 							},
 						] }
 						help={ __(
-							'Experiment mode sends events to web analytics tools like Mixpanel. Personalization mode does NOT send experiment events and is only used to show tailored content.',
+							'Experiment mode sends events to web analytics tools like Mixpanel. ' +
+								'Personalization mode does NOT send experiment events and is only used to show tailored content.',
 							'planet4-gpch-plugin-optimize'
 						) }
 					/>

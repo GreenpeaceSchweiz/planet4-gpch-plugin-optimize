@@ -134,7 +134,10 @@ export default function Edit( { attributes, setAttributes, context } ) {
 					<RangeControl
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
-						label="Target group percentage"
+						label={ __(
+							'Target group percentage',
+							'planet4-gpch-plugin-optimize'
+						) }
 						afterIcon={ percent }
 						value={ targetPercentage }
 						onChange={ ( value ) =>
