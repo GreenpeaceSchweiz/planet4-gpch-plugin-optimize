@@ -20,6 +20,10 @@
 		"optimizationName": {
 			"type": "string"
 		},
+		"optimizationPurpose": {
+			"type": "string",
+			"default": "experiment"
+		},
 		"editorSelectedVariantId": {
 			"type": "string"
 		},
