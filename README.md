@@ -1,8 +1,5 @@
 # Planet4 GPCH Optimize Plugin
 
-> [!CAUTION]
-> **This plugin is still in alpha stage and not ready for production use.**
-
 Testing and personalization functionality for WordPress/Planet4 websites that use Mixpanel for web analytics.
 
 Content optimizations can now be used in two modes:
