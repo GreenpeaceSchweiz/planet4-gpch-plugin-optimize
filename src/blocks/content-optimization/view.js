@@ -246,52 +246,58 @@ const gpOptimizeFrontend = () => {
 	const chooseVariant = ( optimizationId, variants ) => {
 		let winningVariantId = null;
 
-		// Check the conditions in variants and if and of them are met, force show that variant.
-		// Forced variants have priority over random variant selection.
-		variantLoop: for ( const variant of variants ) {
-			// Force preview when force_variant URL parameter is set to the current variantId
-			const urlParams = new URLSearchParams( window.location.search );
-			const forcePreviewVariant = urlParams.get( 'force_variant' );
+		// Force preview when force_variant URL parameter is set to a valid variantId
+		const urlParams = new URLSearchParams( window.location.search );
+		const forcePreviewVariant = urlParams.get( 'force_variant' );
 
-			if ( forcePreviewVariant === variant.dataset.variantId ) {
-				winningVariantId = variant.dataset.variantId;
-				break variantLoop;
+		if ( forcePreviewVariant ) {
+			for ( const variant of variants ) {
+				if ( forcePreviewVariant === variant.dataset.variantId ) {
+					winningVariantId = variant.dataset.variantId;
+					break;
+				}
 			}
+		}
 
-			// Conditionals
-			if ( variant.dataset.conditionals !== undefined ) {
-				const variantConditionals = JSON.parse(
-					variant.dataset.conditionals
-				);
+		// Check the conditions in variants and if any of them are met, force show that variant.
+		// Forced variants have priority over random variant selection.
+		if ( winningVariantId === null ) {
+			variantLoop: for ( const variant of variants ) {
+				// Conditionals
+				if ( variant.dataset.conditionals !== undefined ) {
+					const variantConditionals = JSON.parse(
+						variant.dataset.conditionals
+					);
 
-				if ( typeof variantConditionals === 'object' ) {
-					for ( const condition of variantConditionals ) {
-						let result = false;
+					if ( typeof variantConditionals === 'object' ) {
+						for ( const condition of variantConditionals ) {
+							let result = false;
 
-						if ( condition.type === 'url_parameter' ) {
-							result = matchURLParameters(
-								condition.conditionalKey,
-								condition.value,
-								condition.operator
-							);
-						} else if (
-							condition.type === 'local_storage' ||
-							condition.type === 'session_storage'
-						) {
-							result = matchStorageElements(
-								condition.type,
-								condition.nameInStorage,
-								condition.dataType,
-								condition.conditionalKey,
-								condition.operator,
-								condition.value
-							);
-						}
+							if ( condition.type === 'url_parameter' ) {
+								result = matchURLParameters(
+									condition.conditionalKey,
+									condition.value,
+									condition.operator
+								);
+							} else if (
+								condition.type === 'local_storage' ||
+								condition.type === 'session_storage'
+							) {
+								result = matchStorageElements(
+									condition.type,
+									condition.nameInStorage,
+									condition.dataType,
+									condition.conditionalKey,
+									condition.operator,
+									condition.value
+								);
+							}
 
-						if ( result === true ) {
-							winningVariantId = variant.dataset.variantId;
+							if ( result === true ) {
+								winningVariantId = variant.dataset.variantId;
 
-							break variantLoop;
+								break variantLoop;
+							}
 						}
 					}
 				}
